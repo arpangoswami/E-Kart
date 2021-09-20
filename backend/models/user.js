@@ -1,19 +1,25 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema(
+  {
     name: String,
     email: {
-        type: String,
-        required: true,
-        index: true,
+      type: String,
+      required: true,
+      index: true,
     },
     role: {
-        type: String,
-        default: "subscriber",
+      type: String,
+      default: "subscriber",
     },
-    //cart: [{type: ObjectId, ref: "Product"}],
+    cart: {
+      type: Array,
+      default: [],
+    },
     //wishlist: [{type: ObjectId, ref: "Product"}],
     address: String,
-},{timestamps: true});
+  },
+  { timestamps: true }
+);
 
-module.exports = mongoose.model("User",userSchema);
+module.exports = mongoose.model("User", userSchema);

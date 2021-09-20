@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { getAllCategories } from "../../../functions/category";
 import {
-  getAllCategories,
-  deleteCategory,
-  createCategory,
-} from "../../../functions/category";
+  getAllSubCategories,
+  deleteSubCategory,
+  createSubCategory,
+} from "../../../functions/subCategory.js";
 import {
   Typography,
   makeStyles,
@@ -20,8 +21,8 @@ import {
 import BuildIcon from "@material-ui/icons/Build";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Spin } from "antd";
-import CategoryForm from "../../../components/forms/CategoryForm";
 import LocalSearch from "../../../components/forms/LocalSearch";
+import SubCategoryForm from "../../../components/forms/SubCategoryForm";
 const useStyles = makeStyles((theme) => ({
   paperClass: {
     maxWidth: 600,
@@ -45,31 +46,36 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(4),
   },
 }));
-const ManageCategories = ({ history }) => {
+const ManageSubCategory = ({ history, match }) => {
   const classes = useStyles();
   const { user } = useSelector((state) => ({ ...state }));
   const [loading, setLoading] = useState(false);
-  const [categoryName, setCategoryName] = useState("");
+  const [subCategoryName, setSubCategoryName] = useState("");
   const [listOfCategories, setListOfCategories] = useState([]);
-
+  const [listOfSubCategories, setListOfSubCategories] = useState([]);
+  const [parentCategoryID, setParentCategoryID] = useState("");
   const [keyword, setKeyword] = useState("");
 
   useEffect(() => {
     loadCategories();
+    loadSubCategories();
   }, []);
 
   const loadCategories = () =>
     getAllCategories().then((c) => setListOfCategories(c.data));
 
+  const loadSubCategories = () =>
+    getAllSubCategories().then((c) => setListOfSubCategories(c.data));
+
   const handleDelete = async (event, slug) => {
     event.preventDefault();
     if (window.confirm(`Delete ${slug}?`)) {
       setLoading(true);
-      deleteCategory(slug, user.token)
+      deleteSubCategory(slug, user.token)
         .then((res) => {
           setLoading(false);
           toast.info(`${res.data.name} was successfully deleted`);
-          loadCategories();
+          loadSubCategories();
         })
         .catch((err) => {
           setLoading(false);
@@ -82,7 +88,7 @@ const ManageCategories = ({ history }) => {
 
   const redirectUpdate = async (event, slug) => {
     event.preventDefault();
-    history.push(`/admin/update/category/${slug}`);
+    history.push(`/admin/update/sub-category/${slug}`);
   };
 
   const handleSearch = (event) => {
@@ -92,39 +98,19 @@ const ManageCategories = ({ history }) => {
 
   const searched = (keyword) => (c) => c.name.toLowerCase().includes(keyword);
 
-  const handleSubmitForm = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-    await createCategory({ name: categoryName }, user.token)
-      .then((res) => {
-        setLoading(false);
-        setCategoryName("");
-        toast.success(`"${res.data.name}" has been successfully created`);
-        loadCategories();
-      })
-      .catch((err) => {
-        setLoading(false);
-        console.log("err", err);
-        if (err.response.status === 400) {
-          toast.error(`THERE ${err.response.data}`);
-        } else {
-          toast.error(`HERE ${err}`);
-        }
-      });
-  };
-  const allCategories = (
+  const allSubCategories = (
     <div>
       <Divider />
       <List>
-        {listOfCategories.filter(searched(keyword)).map((category) => (
+        {listOfSubCategories.filter(searched(keyword)).map((subCategory) => (
           <>
-            <ListItem key={category.name}>
-              <ListItemText primary={category.name} />
+            <ListItem key={subCategory.name}>
+              <ListItemText primary={subCategory.name} />
               <ListItemSecondaryAction>
                 <IconButton
                   aria-label="update"
                   onClick={(event) => {
-                    redirectUpdate(event, category.slug);
+                    redirectUpdate(event, subCategory.slug);
                   }}
                   className={classes.leftButton}
                 >
@@ -137,7 +123,7 @@ const ManageCategories = ({ history }) => {
                   edge="end"
                   aria-label="delete"
                   onClick={(event) => {
-                    handleDelete(event, category.slug);
+                    handleDelete(event, subCategory.slug);
                   }}
                 >
                   <Typography color="secondary" variant="subtitle1">
@@ -153,7 +139,7 @@ const ManageCategories = ({ history }) => {
       </List>
     </div>
   );
-  const categoriesList = (
+  const subCategoriesList = (
     <Paper elevation={2} className={classes.paperClass}>
       <Typography
         variant="h6"
@@ -163,11 +149,35 @@ const ManageCategories = ({ history }) => {
         gutterBottom
         className={classes.headerField2}
       >
-        Manage Categories
+        Manage Sub-Categories
       </Typography>
-      {allCategories}
+      {allSubCategories}
     </Paper>
   );
+
+  const handleSubmitForm = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    await createSubCategory(
+      { name: subCategoryName, parent: parentCategoryID },
+      user.token
+    )
+      .then((res) => {
+        setLoading(false);
+        setSubCategoryName("");
+        toast.success(`"${res.data.name}" has been successfully created`);
+        loadSubCategories();
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log("err", err);
+        if (err.response.status === 400) {
+          toast.error(`THERE ${err.response.data}`);
+        } else {
+          toast.error(`HERE ${err}`);
+        }
+      });
+  };
 
   return (
     <div className="container-fluid">
@@ -179,7 +189,7 @@ const ManageCategories = ({ history }) => {
             loading={loading}
             setKeyword={setKeyword}
           />
-          {categoriesList}
+          {subCategoriesList}
         </div>
         <div className="col">
           {loading ? (
@@ -187,13 +197,16 @@ const ManageCategories = ({ history }) => {
               <Spin spinning={loading} size="large" tip="Loading..." />
             </div>
           ) : (
-            <CategoryForm
+            <SubCategoryForm
               handleSubmitForm={handleSubmitForm}
-              buttonText="Create Category"
-              title="Create Category"
-              categoryName={categoryName}
-              setCategoryName={setCategoryName}
+              buttonText="Create SubCategory"
+              title="Create SubCategory"
+              subCategoryName={subCategoryName}
+              setSubCategoryName={setSubCategoryName}
               loading={loading}
+              categoryList={listOfCategories}
+              parentCategoryID={parentCategoryID}
+              setParentCategoryID={setParentCategoryID}
             />
           )}
         </div>
@@ -201,4 +214,4 @@ const ManageCategories = ({ history }) => {
     </div>
   );
 };
-export default ManageCategories;
+export default ManageSubCategory;

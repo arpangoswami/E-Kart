@@ -18,6 +18,9 @@ import Wishlist from "./screens/user/Wishlist";
 import AdminDashboard from "./screens/admin/AdminDashboard";
 import ManageCategories from "./screens/admin/category/ManageCategories";
 import UpdateCategory from "./screens/admin/category/UpdateCategory";
+
+import ManageSubCategory from "./screens/admin/subcategory/ManageSubCategory";
+import UpdateSubCategory from "./screens/admin/subcategory/UpdateSubCategory";
 import { ThemeProvider, createTheme } from "@material-ui/core";
 import { deepPurple, indigo } from "@material-ui/core/colors";
 import { auth } from "./firebase";
@@ -102,6 +105,16 @@ function App() {
               exact
               path="/admin/update/category/:slug"
               component={UpdateCategory}
+            />
+            <AdminRoutes
+              exact
+              path="/admin/manage-subcategory"
+              component={ManageSubCategory}
+            />
+            <AdminRoutes
+              exact
+              path="/admin/update/sub-category/:slug"
+              component={UpdateSubCategory}
             />
           </Switch>
         </Layout>

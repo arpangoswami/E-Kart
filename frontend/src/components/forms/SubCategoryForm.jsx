@@ -10,8 +10,12 @@ import {
   CardMedia,
   CardActionArea,
   FormControl,
+  Select,
+  InputLabel,
+  MenuItem,
+  FormHelperText,
 } from "@material-ui/core";
-import createCategoryImg from "../../assets/createCategory.svg";
+import createCategoryImg from "../../assets/sub-category.svg";
 import CheckIcon from "@material-ui/icons/Check";
 const useStyles = makeStyles((theme) => ({
   cardClass: {
@@ -45,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
   attrField: {
     width: "115%",
     paddingRight: theme.spacing(6),
+    marginBottom: theme.spacing(3),
   },
   btn: {
     marginLeft: theme.spacing(4),
@@ -53,13 +58,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CategoryForm = ({
+const SubCategoryForm = ({
   handleSubmitForm,
   buttonText,
   title,
-  categoryName,
-  setCategoryName,
+  subCategoryName,
+  setSubCategoryName,
   loading,
+  categoryList,
+  parentCategoryID,
+  setParentCategoryID,
 }) => {
   const classes = useStyles();
   return (
@@ -84,20 +92,46 @@ const CategoryForm = ({
             <CardMedia
               className={classes.media}
               image={createCategoryImg}
-              title="Create a new category"
+              title="Create a new sub-category"
             />
             <TextField
-              name="Category"
-              placeholder="Eg:- Microsoft"
-              label="Create a new category"
+              name="Sub-Category"
+              placeholder="Eg:- Laptops"
+              label="Create a new sub category"
               className={classes.attrField}
-              onChange={(event) => setCategoryName(event.target.value)}
-              value={categoryName}
+              onChange={(event) => setSubCategoryName(event.target.value)}
+              value={subCategoryName}
               variant="outlined"
               helperText="At least 2 characters"
               required
               disabled={loading}
             />
+            <FormControl variant="outlined" sx={{ m: 1, minWidth: 100 }}>
+              <InputLabel id="demo-simple-select-required-label">
+                Choose Parent Category
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-required-label"
+                id="demo-simple-select-required"
+                value={parentCategoryID}
+                label="Parent Category"
+                required
+                onChange={(e) => setParentCategoryID(e.target.value)}
+              >
+                <MenuItem value="" disabled>
+                  <em>None</em>
+                </MenuItem>
+                {categoryList.length > 0 &&
+                  categoryList.map((c) => (
+                    <MenuItem key={c._id} value={c._id}>
+                      {c.name}
+                    </MenuItem>
+                  ))}
+              </Select>
+              <FormHelperText>
+                The sub-category will belong to this parent category
+              </FormHelperText>
+            </FormControl>
             <br />
             <CardActions>
               <div className="container pl-5">
@@ -108,7 +142,9 @@ const CategoryForm = ({
                   onClick={handleSubmitForm}
                   className={classes.btn}
                   endIcon={<CheckIcon />}
-                  disabled={loading || categoryName.length < 2}
+                  disabled={
+                    loading || subCategoryName.length < 2 || !parentCategoryID
+                  }
                 >
                   {buttonText}
                 </Button>
@@ -121,4 +157,4 @@ const CategoryForm = ({
     </Card>
   );
 };
-export default CategoryForm;
+export default SubCategoryForm;
