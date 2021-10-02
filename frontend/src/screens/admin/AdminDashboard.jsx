@@ -1,13 +1,21 @@
-import React from "react";
-//import AdminNav from "../../components/navigation/AdminNavigation";
+import React, { useState } from "react";
+import { Spin } from "antd";
 const AdminDashboard = () => {
-  return (<div className="container-fluid">
-    <div className="row">
-      {/* <div className="col-md-2">
-        <AdminNav />
-      </div> */}
-      <div className="col">Admin Dashboard</div>
+  const [loading, setLoading] = useState(false);
+  return (
+    <div className="container-fluid">
+      <div className="row">
+        {loading ? (
+          <div className="container text-center">
+            <Spin spinning={loading} size="large" tip="Loading..." />
+          </div>
+        ) : (
+          <div className="col">
+            <h1>Admin Dashboard</h1>
+          </div>
+        )}
+      </div>
     </div>
-  </div>);
+  );
 };
 export default AdminDashboard;

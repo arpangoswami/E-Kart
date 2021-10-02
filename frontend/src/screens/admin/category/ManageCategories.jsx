@@ -55,6 +55,8 @@ const ManageCategories = ({ history }) => {
   const [keyword, setKeyword] = useState("");
 
   useEffect(() => {
+    const loadCategories = () =>
+      getAllCategories().then((c) => setListOfCategories(c.data));
     loadCategories();
   }, []);
 
@@ -83,11 +85,6 @@ const ManageCategories = ({ history }) => {
   const redirectUpdate = async (event, slug) => {
     event.preventDefault();
     history.push(`/admin/update/category/${slug}`);
-  };
-
-  const handleSearch = (event) => {
-    event.preventDefault();
-    setKeyword(event.target.value.toLowerCase());
   };
 
   const searched = (keyword) => (c) => c.name.toLowerCase().includes(keyword);
@@ -178,6 +175,8 @@ const ManageCategories = ({ history }) => {
             keyword={keyword}
             loading={loading}
             setKeyword={setKeyword}
+            title="Search for Category"
+            searchText="Search for Category"
           />
           {categoriesList}
         </div>

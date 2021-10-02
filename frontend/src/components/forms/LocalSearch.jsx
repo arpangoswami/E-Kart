@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     display: "block",
   },
 }));
-const LocalSearch = ({ keyword, setKeyword, loading }) => {
+const LocalSearch = ({ keyword, setKeyword, loading, title, searchText }) => {
   const classes = useStyles();
   const handleSearch = (event) => {
     event.preventDefault();
@@ -48,13 +48,13 @@ const LocalSearch = ({ keyword, setKeyword, loading }) => {
         gutterBottom
         className={classes.headerField2}
       >
-        Search for category
+        {title}
       </Typography>
       <Grid item xs={15} style={{ textAlign: "center" }}>
         <TextField
           name="Search for category"
           placeholder="Eg:- Microsoft"
-          label="Search for category"
+          label={searchText}
           className={classes.attrField}
           onChange={handleSearch}
           value={keyword}

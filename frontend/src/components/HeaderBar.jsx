@@ -33,11 +33,11 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import HistoryIcon from "@material-ui/icons/History";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
-import CreateIcon from '@material-ui/icons/Create';
-import FolderIcon from '@material-ui/icons/Folder';
-import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import CreateNewFolderIcon from "@material-ui/icons/CreateNewFolder";
+import CreateIcon from "@material-ui/icons/Create";
+import FolderIcon from "@material-ui/icons/Folder";
+import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 //admin drawer
 
 import { useHistory } from "react-router-dom";
@@ -232,7 +232,7 @@ export default function HeaderBar({ window }) {
     {
       text: "User Dashboard",
       icon: <DashboardIcon color="secondary" />,
-      path: "/user/dashboard"
+      path: "/user/dashboard",
     },
     {
       text: "History",
@@ -272,7 +272,7 @@ export default function HeaderBar({ window }) {
     {
       text: "Admin Dashboard",
       icon: <DashboardIcon color="secondary" />,
-      path: "/admin/dashboard"
+      path: "/admin/dashboard",
     },
     {
       text: "Change Password",
@@ -281,27 +281,27 @@ export default function HeaderBar({ window }) {
     },
     {
       text: "Create product",
-      icon: <AddCircleOutlineIcon color="secondary"/>,
+      icon: <AddCircleOutlineIcon color="secondary" />,
       path: "/admin/create-product",
     },
     {
       text: "Manage product",
-      icon: <CreateIcon color="secondary"/>,
+      icon: <CreateIcon color="secondary" />,
       path: "/admin/manage-product",
     },
     {
       text: "Manage category",
-      icon: <CreateNewFolderIcon color="secondary"/>,
+      icon: <CreateNewFolderIcon color="secondary" />,
       path: "/admin/manage-category",
     },
     {
       text: "Manage sub-category",
-      icon: <FolderIcon color="secondary"/>,
+      icon: <FolderIcon color="secondary" />,
       path: "/admin/manage-subcategory",
     },
     {
       text: "Coupons",
-      icon: <LocalOfferIcon color="secondary"/>,
+      icon: <LocalOfferIcon color="secondary" />,
       path: "/admin/coupon",
     },
   ];
@@ -484,12 +484,7 @@ export default function HeaderBar({ window }) {
               <MenuIcon />
             </IconButton>
           )}
-          <Typography
-            className={classes.title}
-            variant="h6"
-            noWrap
-            onClick={redirectHome}
-          >
+          <Typography className={classes.title} variant="h6" noWrap>
             E-Kart
           </Typography>
           <IconButton

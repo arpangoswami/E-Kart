@@ -88,7 +88,7 @@ const CategoryForm = ({
             />
             <TextField
               name="Category"
-              placeholder="Eg:- Microsoft"
+              placeholder="Eg:- Home Appliances"
               label="Create a new category"
               className={classes.attrField}
               onChange={(event) => setCategoryName(event.target.value)}

@@ -15,19 +15,19 @@ const UpdateSubCategory = ({ history, match }) => {
   const [subCategoryName, setSubCategoryName] = useState("");
   const [listOfCategories, setListOfCategories] = useState([]);
   const [parentID, setParentID] = useState("");
+
   useEffect(() => {
+    const loadCategories = () =>
+      getAllCategories().then((c) => setListOfCategories(c.data));
+    const loadSingleCategory = () => {
+      getSubCategory(match.params.slug).then((res) => {
+        setSubCategoryName(res.data.name);
+        setParentID(res.data.parent);
+      });
+    };
     loadCategories();
     loadSingleCategory();
-  }, []);
-
-  const loadCategories = () =>
-    getAllCategories().then((c) => setListOfCategories(c.data));
-  const loadSingleCategory = () => {
-    getSubCategory(match.params.slug).then((res) => {
-      setSubCategoryName(res.data.name);
-      setParentID(res.data.parent);
-    });
-  };
+  }, [match.params.slug]);
 
   const handleSubmitForm = async (event) => {
     event.preventDefault();

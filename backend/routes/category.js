@@ -15,6 +15,7 @@ const {
   getAllCategories,
   updateCategory,
   deleteCategory,
+  getAllChildSubCategories,
 } = require("../controllers/category");
 
 router.post("/create-category", authenticationCheck, isAdmin, createCategory);
@@ -36,5 +37,7 @@ router.delete(
   isAdmin,
   deleteCategory
 );
+
+router.get("/category/child-sub-categories/:_id", getAllChildSubCategories);
 
 module.exports = router;

@@ -11,14 +11,13 @@ const UpdateCategory = ({ history, match }) => {
   const [categoryName, setCategoryName] = useState("");
 
   useEffect(() => {
+    const loadSingleCategory = () => {
+      getCategory(match.params.slug).then((res) =>
+        setCategoryName(res.data.name)
+      );
+    };
     loadSingleCategory();
-  }, []);
-
-  const loadSingleCategory = () => {
-    getCategory(match.params.slug).then((res) =>
-      setCategoryName(res.data.name)
-    );
-  };
+  }, [match.params.slug]);
 
   const handleSubmitForm = async (event) => {
     event.preventDefault();

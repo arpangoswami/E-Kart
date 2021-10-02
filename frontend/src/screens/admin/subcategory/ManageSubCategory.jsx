@@ -91,11 +91,6 @@ const ManageSubCategory = ({ history, match }) => {
     history.push(`/admin/update/sub-category/${slug}`);
   };
 
-  const handleSearch = (event) => {
-    event.preventDefault();
-    setKeyword(event.target.value.toLowerCase());
-  };
-
   const searched = (keyword) => (c) => c.name.toLowerCase().includes(keyword);
 
   const allSubCategories = (
@@ -188,6 +183,8 @@ const ManageSubCategory = ({ history, match }) => {
             keyword={keyword}
             loading={loading}
             setKeyword={setKeyword}
+            title="Search for Sub-Category"
+            searchText="Search for Sub-Category"
           />
           {subCategoriesList}
         </div>

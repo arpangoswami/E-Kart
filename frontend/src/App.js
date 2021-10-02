@@ -18,9 +18,10 @@ import Wishlist from "./screens/user/Wishlist";
 import AdminDashboard from "./screens/admin/AdminDashboard";
 import ManageCategories from "./screens/admin/category/ManageCategories";
 import UpdateCategory from "./screens/admin/category/UpdateCategory";
-
+import CreateProduct from "./screens/admin/product/CreateProduct";
 import ManageSubCategory from "./screens/admin/subcategory/ManageSubCategory";
 import UpdateSubCategory from "./screens/admin/subcategory/UpdateSubCategory";
+import ViewAllProducts from "./screens/admin/product/ViewAllProducts";
 import { ThemeProvider, createTheme } from "@material-ui/core";
 import { deepPurple, indigo } from "@material-ui/core/colors";
 import { auth } from "./firebase";
@@ -115,6 +116,16 @@ function App() {
               exact
               path="/admin/update/sub-category/:slug"
               component={UpdateSubCategory}
+            />
+            <AdminRoutes
+              exact
+              path="/admin/create-product"
+              component={CreateProduct}
+            />
+            <AdminRoutes
+              exact
+              path="/admin/manage-product"
+              component={ViewAllProducts}
             />
           </Switch>
         </Layout>
