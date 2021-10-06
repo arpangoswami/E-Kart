@@ -23,6 +23,7 @@ import {
   amber,
 } from "@material-ui/core/colors";
 import defaultLaptop from "../../assets/defaultLaptop.jpg";
+import { Link } from "react-router-dom";
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -86,6 +87,7 @@ const AdminProductCard = ({ product, key, handleDelete }) => {
               minHeight: 100,
               height: "auto",
               objectFit: "contain",
+              cursor: "auto",
             }}
           />
         </CardActionArea>
@@ -96,13 +98,16 @@ const AdminProductCard = ({ product, key, handleDelete }) => {
         </CardContent>
         <CardActions>
           <Grid container justify="center">
-            <IconButton
-              variant="contained"
-              color="primary"
-              className="text-info mr-4"
-            >
-              <BorderColorIcon />
-            </IconButton>
+            <Link to={`/admin/update/product/${slug}`}>
+              <IconButton
+                variant="contained"
+                color="primary"
+                className="text-info mr-4"
+              >
+                <BorderColorIcon />
+              </IconButton>
+            </Link>
+
             <IconButton
               variant="contained"
               color="primary"

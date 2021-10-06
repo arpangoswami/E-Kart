@@ -31,3 +31,29 @@ exports.deleteProduct = async (req, res) => {
     return res.status(400).send("Product deletion failed");
   }
 };
+
+exports.readProduct = async (req, res) => {
+  let product = await Product.findOne({ slug: req.params.slug })
+    .populate("category")
+    .populate("subCategories")
+    .exec();
+  res.json(product);
+};
+
+exports.updateProduct = async (req, res) => {
+  const { title } = req.body;
+  try {
+    const newProd = req.body;
+    newProd.slug = slugify(title).toLowerCase();
+    const updated = await Product.findOneAndUpdate(
+      { slug: req.params.slug },
+      { ...newProd },
+      { new: true }
+    );
+    res.json(updated);
+  } catch (err) {
+    res.status(400).json({
+      err: "Update product failed",
+    });
+  }
+};

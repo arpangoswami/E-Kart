@@ -19,11 +19,7 @@ const AdminRoutes = ({ children, ...rest }) => {
         });
     }
   }, [user]);
-  return isAdmin ? (
-    <Route {...rest}  />
-  ) : (
-    <LoadingToRedirect />
-  );
+  return isAdmin ? <Route {...rest} /> : <LoadingToRedirect />;
 };
 
 export default AdminRoutes;

@@ -22,7 +22,18 @@ const initialState = {
 };
 const CreateProduct = () => {
   const enumColors = ["Black", "Brown", "Silver", "White", "Blue"];
-  const enumBrands = ["Apple", "Samsung", "Microsoft", "Lenovo", "ASUS", "HP"];
+  const enumBrands = [
+    "Apple",
+    "Samsung",
+    "Microsoft",
+    "Lenovo",
+    "ASUS",
+    "HP",
+    "Panasonic",
+    "Acer",
+    "Dell",
+    "MSI",
+  ];
   const [values, setValues] = useState(initialState);
   const [listOfCategories, setListOfCategories] = useState([]);
   const [listOfSubCategories, setListOfSubCategories] = useState([]);
@@ -79,6 +90,7 @@ const CreateProduct = () => {
             </div>
           ) : (
             <ProductCreateForm
+              heading="Create New Product"
               handleSubmit={handleSubmit}
               handleChange={handleChange}
               listOfCategories={listOfCategories}

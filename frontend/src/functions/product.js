@@ -6,7 +6,16 @@ export const createProduct = async (product, authToken) =>
       authToken,
     },
   });
-
+export const updateProduct = async (slug, product, authToken) =>
+  await axios.put(
+    `${process.env.REACT_APP_API}/product/update/${slug}`,
+    product,
+    {
+      headers: {
+        authToken,
+      },
+    }
+  );
 export const getProductsByCount = async (count) =>
   await axios.get(`${process.env.REACT_APP_API}/products/${count}`);
 
@@ -16,3 +25,6 @@ export const deleteProduct = async (slug, authToken) =>
       authToken,
     },
   });
+
+export const getSingleProduct = async (slug) =>
+  await axios.get(`${process.env.REACT_APP_API}/product/${slug}`);

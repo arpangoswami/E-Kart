@@ -22,6 +22,7 @@ import CreateProduct from "./screens/admin/product/CreateProduct";
 import ManageSubCategory from "./screens/admin/subcategory/ManageSubCategory";
 import UpdateSubCategory from "./screens/admin/subcategory/UpdateSubCategory";
 import ViewAllProducts from "./screens/admin/product/ViewAllProducts";
+import UpdateProduct from "./screens/admin/product/UpdateProduct";
 import { ThemeProvider, createTheme } from "@material-ui/core";
 import { deepPurple, indigo } from "@material-ui/core/colors";
 import { auth } from "./firebase";
@@ -126,6 +127,11 @@ function App() {
               exact
               path="/admin/manage-product"
               component={ViewAllProducts}
+            />
+            <AdminRoutes
+              exact
+              path="/admin/update/product/:slug"
+              component={UpdateProduct}
             />
           </Switch>
         </Layout>

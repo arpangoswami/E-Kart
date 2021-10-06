@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProductCreateForm = ({
+const ProductUpdateForm = ({
   heading,
   handleSubmit,
   handleChange,
@@ -92,8 +92,11 @@ const ProductCreateForm = ({
   loading,
   setLoading,
   handleCategoryChange,
+  arrayOfSubIDs,
+  setArrayOfSubIDs,
+  cateId,
+  setCateId,
 }) => {
-  const classes = useStyles();
   const {
     title,
     description,
@@ -118,6 +121,7 @@ const ProductCreateForm = ({
     700: 2,
     350: 1,
   };
+  const classes = useStyles();
 
   return (
     <Paper className={classes.paperClass}>
@@ -211,6 +215,7 @@ const ProductCreateForm = ({
                   labelId="demo-simple-select-required-label"
                   id="demo-simple-select-required"
                   value={shipping}
+                  defaultValue=""
                   name="shipping"
                   label="Shipping"
                   onChange={handleChange}
@@ -243,14 +248,16 @@ const ProductCreateForm = ({
                 <Select
                   labelId="demo-simple-select-required-label"
                   id="demo-simple-select-required"
-                  value={category}
+                  defaultValue={null}
+                  value={cateId}
                   name="category"
                   label="Parent Category"
-                  onChange={handleCategoryChange}
+                  onChange={(e) => {
+                    e.preventDefault();
+                    setCateId(e.target.value);
+                    handleCategoryChange(e.target.value);
+                  }}
                 >
-                  <MenuItem value="" disabled>
-                    <em>None</em>
-                  </MenuItem>
                   {listOfCategories.length > 0 &&
                     listOfCategories.map((c) => (
                       <MenuItem key={c._id} value={c._id}>
@@ -278,11 +285,11 @@ const ProductCreateForm = ({
                     id="demo-multiple-name"
                     multiple
                     name="subCategories"
-                    value={subCategories}
+                    value={arrayOfSubIDs}
                     onChange={(e) => {
                       e.preventDefault();
                       setValues({ ...values, subCategories: e.target.value });
-                      console.log("HERE: ", values.subCategories);
+                      setArrayOfSubIDs(e.target.value);
                     }}
                     input={<OutlinedInput label="subCategories" />}
                   >
@@ -332,9 +339,6 @@ const ProductCreateForm = ({
                 label="Color"
                 onChange={handleChange}
               >
-                <MenuItem value="" disabled>
-                  <em>None</em>
-                </MenuItem>
                 {enumColors.length > 0 &&
                   enumColors.map((c) => (
                     <MenuItem key={c} value={c}>
@@ -361,9 +365,6 @@ const ProductCreateForm = ({
                 label="Brand"
                 onChange={handleChange}
               >
-                <MenuItem value="" disabled>
-                  <em>None</em>
-                </MenuItem>
                 {enumBrands.length > 0 &&
                   enumBrands.map((c) => (
                     <MenuItem key={c} value={c}>
@@ -412,4 +413,4 @@ const ProductCreateForm = ({
   );
 };
 
-export default ProductCreateForm;
+export default ProductUpdateForm;

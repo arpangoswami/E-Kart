@@ -75,65 +75,52 @@ const FileUpload = ({ values, setValues, setLoading }) => {
       });
   };
   return (
-    <div>
-      <Button
-        onClick={() => setOpen(true)}
-        color="secondary"
-        variant="contained"
-        endIcon={<CloudUploadIcon />}
-        className="mt-3"
-      >
-        Upload Images
-      </Button>
-      <DropzoneDialog
-        open={open}
-        filesLimit={5}
-        acceptedFiles={["image/*"]}
-        cancelButtonText={"cancel"}
-        submitButtonText={"submit"}
-        showPreviews={true}
-        showFileNamesInPreview={true}
-        maxFileSize={50000000}
-        onClose={() => setOpen(false)}
-        onSave={(files) => {
-          handleSave(files);
-        }}
-      />
+    <Grid container justifyContent="center" alignContent="center">
       <Grid container justifyContent="center" alignContent="center">
-        <div className="row">
-          {values.images &&
-            values.images.map((image) => (
-              // <Badge
-              //   count="X"
-              //   key={image.public_id}
-              //   onClick={() => handleRemoveImage(image.public_id)}
-              //   style={{ cursor: "pointer" }}
-              // >
-              //   <Avatar
-              //     src={image.url}
-              //     size={120}
-              //     shape="square"
-              //     className="col-md-4 ml-3 mr-3"
-              //   />
-              // </Badge>
-              <Badge
-                count="X"
-                key={image.public_id}
-                onClick={() => handleRemoveImage(image.public_id)}
-                style={{ cursor: "pointer" }}
-                className="mt-4"
-              >
-                <Avatar
-                  src={image.url}
-                  size={100}
-                  shape="square"
-                  className="ml-3 "
-                />
-              </Badge>
-            ))}
-        </div>
+        <Button
+          onClick={() => setOpen(true)}
+          color="secondary"
+          variant="contained"
+          endIcon={<CloudUploadIcon />}
+          className="mt-3"
+        >
+          Upload Images
+        </Button>
+        <DropzoneDialog
+          open={open}
+          filesLimit={5}
+          acceptedFiles={["image/*"]}
+          cancelButtonText={"cancel"}
+          submitButtonText={"submit"}
+          showPreviews={true}
+          showFileNamesInPreview={true}
+          maxFileSize={50000000}
+          onClose={() => setOpen(false)}
+          onSave={(files) => {
+            handleSave(files);
+          }}
+        />
       </Grid>
-    </div>
+      <div className="row">
+        {values.images &&
+          values.images.map((image) => (
+            <Badge
+              count="X"
+              key={image.public_id}
+              onClick={() => handleRemoveImage(image.public_id)}
+              style={{ cursor: "pointer" }}
+              className="mt-4 mr-3"
+            >
+              <Avatar
+                src={image.url}
+                size={100}
+                shape="square"
+                className="ml-3 mr-2"
+              />
+            </Badge>
+          ))}
+      </div>
+    </Grid>
   );
 };
 
