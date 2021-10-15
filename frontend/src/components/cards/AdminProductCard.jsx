@@ -35,7 +35,7 @@ function truncate(source, size) {
 const useStyles = makeStyles((theme) => ({
   cardClass: {
     width: 300,
-    height: 500,
+    height: 530,
     alignContent: "center",
     flexDirection: "column",
     margin: theme.spacing(5),
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(2),
   },
 }));
-const AdminProductCard = ({ product, key, handleDelete }) => {
+const AdminProductCard = ({ product, handleDelete }) => {
   const classes = useStyles();
   const { title, description, images, slug } = product;
   const imageLink = images && images.length > 0 ? images[0].url : defaultLaptop;
@@ -83,9 +83,7 @@ const AdminProductCard = ({ product, key, handleDelete }) => {
             title={title}
             image={imageLink}
             style={{
-              maxHeight: 180,
-              minHeight: 100,
-              height: "auto",
+              height: 180,
               objectFit: "contain",
               cursor: "auto",
             }}

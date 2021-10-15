@@ -1,25 +1,37 @@
-import React, { useState, useEffect } from "react";
-import Masonry from "react-masonry-css";
-import { toast } from "react-toastify";
+import React, { useState } from "react";
 import { Spin } from "antd";
-import { Grid } from "@material-ui/core";
-import { getProductsByCount } from "../functions/product";
+import Jumbotron from "../components/cards/Jumbotron";
+import LatestProducts from "./home/LatestProducts";
+import BestSellers from "./home/BestSellers";
 const Home = () => {
-  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    loadPageProducts();
-  }, []);
-  const loadPageProducts = () => {
-    getProductsByCount(6)
-      .then((res) => setProducts(res.data))
-      .catch((err) => toast.error(`${err} happened while fetching products`));
-  };
+  const handleAddtoCart = (slug) => {};
   return (
-    <div>
-      <p>Home</p>
-      {JSON.stringify(products)}
-    </div>
+    <>
+      {loading ? (
+        <div className="container text-center m-4">
+          <Spin spinning={loading} size="large" tip="Loading..." />
+        </div>
+      ) : (
+        <>
+          <div className="jumbotron h1 text-center font-weight-bold text-danger">
+            <Jumbotron
+              text={["Best Prices", "Original Products", "Latest Products"]}
+            />
+          </div>
+          <LatestProducts
+            handleAddtoCart={handleAddtoCart}
+            setLoading={setLoading}
+            loading={loading}
+          />
+          <BestSellers
+            handleAddtoCart={handleAddtoCart}
+            setLoading={setLoading}
+            loading={loading}
+          />
+        </>
+      )}
+    </>
   );
 };
 

@@ -57,3 +57,46 @@ exports.updateProduct = async (req, res) => {
     });
   }
 };
+//WITHOUT PAGINATION
+// exports.listCountProductsSort = async (req, res) => {
+//   try {
+//     const { sort, order, count } = req.body;
+//     const products = await Product.find({})
+//       .populate("category")
+//       .populate("subCategories")
+//       .sort([[sort, order]])
+//       .limit(count)
+//       .exec();
+//     res.json(products);
+//   } catch (err) {
+//     res.status(400).json({
+//       err: "List Products Sort failed ",
+//     });
+//   }
+// };
+
+//WITH PAGINATION
+exports.listCountProductsSort = async (req, res) => {
+  try {
+    const { sort, order, page } = req.body;
+    const currentPage = page || 1;
+    const perPage = 3;
+    const products = await Product.find({})
+      .skip((currentPage - 1) * perPage)
+      .populate("category")
+      .populate("subCategories")
+      .sort([[sort, order]])
+      .limit(perPage)
+      .exec();
+    res.json(products);
+  } catch (err) {
+    res.status(400).json({
+      err: "List Products Sort failed ",
+    });
+  }
+};
+
+exports.getTotalCount = async (req, res) => {
+  let total = await Product.find({}).estimatedDocumentCount().exec();
+  res.json({ total });
+};

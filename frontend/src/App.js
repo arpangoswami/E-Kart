@@ -23,6 +23,7 @@ import ManageSubCategory from "./screens/admin/subcategory/ManageSubCategory";
 import UpdateSubCategory from "./screens/admin/subcategory/UpdateSubCategory";
 import ViewAllProducts from "./screens/admin/product/ViewAllProducts";
 import UpdateProduct from "./screens/admin/product/UpdateProduct";
+import SingleProduct from "./screens/SingleProduct";
 import { ThemeProvider, createTheme } from "@material-ui/core";
 import { deepPurple, indigo } from "@material-ui/core/colors";
 import { auth } from "./firebase";
@@ -34,7 +35,7 @@ const theme = createTheme({
     secondary: indigo,
   },
   typography: {
-    fontFamily: "Noto+Sans+JP",
+    fontFamily: ["Noto+Sans+JP", "Quicksand"].join(","),
     fontWeightLight: 300,
     fontWeightRegular: 400,
     fontWeightMedium: 500,
@@ -133,6 +134,7 @@ function App() {
               path="/admin/update/product/:slug"
               component={UpdateProduct}
             />
+            <Route exact path="/product/:slug" component={SingleProduct} />
           </Switch>
         </Layout>
       </BrowserRouter>

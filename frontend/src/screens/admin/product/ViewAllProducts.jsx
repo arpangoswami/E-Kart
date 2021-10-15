@@ -44,30 +44,25 @@ const ViewAllProducts = () => {
       });
   };
   return (
-    <div>
-      <div className="row">
-        {loading ? (
-          <div className="container text-center">
-            <Spin spinning={loading} size="large" tip="Loading..." />
-          </div>
-        ) : (
-          <Grid container justify="center">
-            <Masonry
-              breakpointCols={breakpointColumnsObj}
-              className="my-masonry-grid"
-              columnClassName="my-masonry-grid_column"
-            >
-              {products.map((p) => (
-                <AdminProductCard
-                  product={p}
-                  key={p._id}
-                  handleDelete={handleDelete}
-                />
-              ))}
-            </Masonry>
-          </Grid>
-        )}
-      </div>
+    <div className="row">
+      {loading && (
+        <div className="container text-center">
+          <Spin spinning={loading} size="large" tip="Loading..." />
+        </div>
+      )}
+      <Grid container justify="center">
+        <Masonry
+          breakpointCols={breakpointColumnsObj}
+          className="my-masonry-grid"
+          columnClassName="my-masonry-grid_column"
+        >
+          {products.map((p) => (
+            <div key={p._id}>
+              <AdminProductCard product={p} handleDelete={handleDelete} />
+            </div>
+          ))}
+        </Masonry>
+      </Grid>
     </div>
   );
 };

@@ -33,6 +33,7 @@ const CreateProduct = () => {
     "Acer",
     "Dell",
     "MSI",
+    "Redmi",
   ];
   const [values, setValues] = useState(initialState);
   const [listOfCategories, setListOfCategories] = useState([]);
@@ -82,29 +83,27 @@ const CreateProduct = () => {
 
   return (
     <div className="container-fluid">
-      <div className="row">
-        <div className="col">
-          {loading ? (
-            <div className="container text-center">
-              <Spin spinning={loading} size="large" tip="Loading..." />
-            </div>
-          ) : (
-            <ProductCreateForm
-              heading="Create New Product"
-              handleSubmit={handleSubmit}
-              handleChange={handleChange}
-              listOfCategories={listOfCategories}
-              listOfSubCategories={listOfSubCategories}
-              enumColors={enumColors}
-              enumBrands={enumBrands}
-              values={values}
-              setValues={setValues}
-              loading={loading}
-              setLoading={setLoading}
-              handleCategoryChange={handleCategoryChange}
-            />
-          )}
-        </div>
+      <div className="col">
+        {loading ? (
+          <div className="container text-center">
+            <Spin spinning={loading} size="large" tip="Loading..." />
+          </div>
+        ) : (
+          <ProductCreateForm
+            heading="Create New Product"
+            handleSubmit={handleSubmit}
+            handleChange={handleChange}
+            listOfCategories={listOfCategories}
+            listOfSubCategories={listOfSubCategories}
+            enumColors={enumColors}
+            enumBrands={enumBrands}
+            values={values}
+            setValues={setValues}
+            loading={loading}
+            setLoading={setLoading}
+            handleCategoryChange={handleCategoryChange}
+          />
+        )}
       </div>
     </div>
   );

@@ -15,10 +15,12 @@ const {
   deleteProduct,
   readProduct,
   updateProduct,
+  listCountProductsSort,
+  getTotalCount,
 } = require("../controllers/product");
 
 router.post("/create-product", authenticationCheck, isAdmin, createProduct);
-
+router.get("/products/total-count", getTotalCount);
 router.get("/products/:count", getAllProducts);
 
 router.delete(
@@ -36,5 +38,7 @@ router.put(
   isAdmin,
   updateProduct
 );
+
+router.post("/products/sort", listCountProductsSort);
 
 module.exports = router;
