@@ -1,13 +1,11 @@
 import React from "react";
-//import UserNav from "../../components/navigation/UserNavigation";
 const UserDashboard = () => {
-  return (<div className="container-fluid">
-    <div className="row">
-      {/* <div className="col-md-2">
-        <UserNav />
-      </div> */}
-      <div className="col">user dashboard page</div>
+  return (
+    <div className="container-fluid">
+      <div className="row">
+        <h1 className="col text-danger">user dashboard page</h1>
+      </div>
     </div>
-  </div>);
+  );
 };
 export default UserDashboard;

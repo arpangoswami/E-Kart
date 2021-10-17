@@ -27,7 +27,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Spin } from "antd";
 import { Link } from "react-router-dom";
 import { createOrUpdateUser } from "../../functions/auth";
-
 const useStyles = makeStyles((theme) => ({
   cardClass: {
     maxWidth: 600,
@@ -64,13 +63,9 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(6),
   },
   btn: {
-    marginLeft: theme.spacing(4),
-    marginRight: theme.spacing(2),
     marginBottom: theme.spacing(2),
   },
   btn2: {
-    marginLeft: theme.spacing(5),
-    marginRight: theme.spacing(2),
     marginBottom: theme.spacing(2),
   },
 }));
@@ -79,31 +74,37 @@ function validateEmail(email) {
   let re = /\S+@\S+\.\S+/;
   return re.test(email);
 }
-const Login = ({history}) => {
+const Login = ({ history }) => {
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [pwdError, setPwdError] = useState(false);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(true);
-  //const history = useHistory();
+  const { user } = useSelector((state) => ({ ...state }));
   const dispatcher = useDispatch();
-  const roleBasedRedirect = (res) => {
-    if (res.data.role === "admin") {
-      history.push("/admin/dashboard");
+  useEffect(() => {
+    let intended = history.location.state;
+    if (intended) {
+      return;
     } else {
-      history.push("/user/dashboard")
+      if (user && user.token) history.push("/");
+    }
+  }, [user, history]);
+  const roleBasedRedirect = (res) => {
+    let intended = history.location.state;
+    if (intended) {
+      history.push(intended.from);
+    } else {
+      if (res.data.role === "admin") {
+        history.push("/admin/dashboard");
+      } else {
+        history.push("/user/dashboard");
+      }
     }
   };
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const [loading, setLoading] = useState(false);
-
-  const { user } = useSelector((state) => ({ ...state }));
-  useEffect(() => {
-    if (user && user.token) {
-      history.push("/");
-    }
-  }, [user,history]);
 
   const handleSubmitForm = async (event) => {
     event.preventDefault();
@@ -148,7 +149,11 @@ const Login = ({history}) => {
               _id: res.data._id,
             },
           });
-          roleBasedRedirect(res);
+          if (history.location.state) {
+            history.push(history.location.state.from);
+          } else {
+            roleBasedRedirect(res);
+          }
         })
         .catch((err) => console.log("ERROR SIGN IN: ", err));
     } catch (error) {
@@ -177,7 +182,11 @@ const Login = ({history}) => {
                 _id: res.data._id,
               },
             });
-            roleBasedRedirect(res);
+            if (history.location.state) {
+              history.push(history.location.state.from);
+            } else {
+              roleBasedRedirect(res);
+            }
           })
           .catch((err) => console.log("ERROR GOOGLE SIGN IN: ", err));
       })
@@ -251,34 +260,43 @@ const Login = ({history}) => {
               />
               <br />
               <CardActions>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  onClick={handleSubmitForm}
-                  className={classes.btn2}
-                  endIcon={<MailFilled />}
-                >
-                  Login with email
-                </Button>
+                <Grid container justify="center">
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSubmitForm}
+                    className={classes.btn2}
+                    endIcon={<MailFilled />}
+                  >
+                    Login with email
+                  </Button>
+                </Grid>
               </CardActions>
               <br />
               <CardActions>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="secondary"
-                  onClick={googleLogin}
-                  className={classes.btn}
-                  endIcon={<GoogleOutlined />}
-                >
-                  Login with Google
-                </Button>
+                <Grid container justify="center">
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="secondary"
+                    onClick={googleLogin}
+                    className={classes.btn}
+                    endIcon={<GoogleOutlined />}
+                  >
+                    Login with Google
+                  </Button>
+                </Grid>
               </CardActions>
               <CardActions>
-                <Link to="/forgot/password" className="float-right text-danger">
-                  Forgot Password
-                </Link>
+                <Grid container justify="flex-end">
+                  <Link
+                    to="/forgot/password"
+                    className="text-danger ml-4 float-right"
+                  >
+                    <Typography>Forgot Password</Typography>
+                  </Link>
+                </Grid>
               </CardActions>
             </FormControl>
           </Grid>

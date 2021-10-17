@@ -12,7 +12,6 @@ const ProductListItems = ({ product }) => {
     quantity,
     sold,
   } = product;
-  console.log("CATEGORY, ", category);
   return (
     <div className="row">
       <div className="col-md-5">

@@ -3,8 +3,16 @@ import { Spin } from "antd";
 import Jumbotron from "../components/cards/Jumbotron";
 import LatestProducts from "./home/LatestProducts";
 import BestSellers from "./home/BestSellers";
-const Home = () => {
+//import { useSelector } from "react-redux";
+const Home = ({ history }) => {
   const [loading, setLoading] = useState(false);
+  //const { user } = useSelector((state) => ({ ...state }));
+  // useEffect(() => {
+  //   let intended = history.location.state;
+  //   if (!intended && user && user.token) {
+  //     history.push("/");
+  //   }
+  // }, [user, history]);
   const handleAddtoCart = (slug) => {};
   return (
     <>

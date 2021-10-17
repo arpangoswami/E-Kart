@@ -25,6 +25,7 @@ import {
 } from "@material-ui/core/colors";
 import defaultLaptop from "../../assets/defaultLaptop.jpg";
 import { Link } from "react-router-dom";
+import { showAverage } from "../../functions/rating.js";
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -36,7 +37,7 @@ function truncate(source, size) {
 const useStyles = makeStyles((theme) => ({
   cardClass: {
     width: 300,
-    height: 545,
+    height: 560,
     alignContent: "center",
     flexDirection: "column",
     margin: theme.spacing(5),
@@ -73,8 +74,13 @@ const ProductCard = ({ product, handleAddtoCart }) => {
           </Avatar>
         }
         title={truncate(title, 20)}
-        subheader={truncate(title, 60)}
+        subheader={truncate(title, 55)}
       />
+      {product && product.ratings && product.ratings.length > 0 ? (
+        showAverage(product)
+      ) : (
+        <div className="text-center pb-1">No ratings yet</div>
+      )}
       <CardActionArea>
         {images && images.length > 0 ? (
           <Carousel autoPlay={false} animation="fade" indicators timeout={200}>

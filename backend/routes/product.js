@@ -17,6 +17,7 @@ const {
   updateProduct,
   listCountProductsSort,
   getTotalCount,
+  productStar,
 } = require("../controllers/product");
 
 router.post("/create-product", authenticationCheck, isAdmin, createProduct);
@@ -41,4 +42,6 @@ router.put(
 
 router.post("/products/sort", listCountProductsSort);
 
+//ratings
+router.put("/product/add-rating/:productId", authenticationCheck, productStar);
 module.exports = router;

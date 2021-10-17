@@ -17,7 +17,7 @@ import {
   IconButton,
 } from "@material-ui/core";
 import { EyeFilled, EyeInvisibleFilled } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import welcome from "../../assets/welcome.svg";
 import { createOrUpdateUser } from "../../functions/auth";
 import CheckIcon from "@material-ui/icons/Check";
@@ -71,10 +71,15 @@ const SignupComplete = ({ history }) => {
   const [showPassword, setShowPassword] = useState(true);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const dispatcher = useDispatch();
-  //const { user } = useSelector((state) => ({ ...state }));
+  const { user } = useSelector((state) => ({ ...state }));
   useEffect(() => {
     setEmail(window.localStorage.getItem("emailForSignup"));
   }, [history]);
+  useEffect(() => {
+    if (user && user.token) {
+      history.push("/");
+    }
+  }, [user, history]);
   const handleSubmitForm = async (event) => {
     event.preventDefault();
     console.log("Password: ", password);

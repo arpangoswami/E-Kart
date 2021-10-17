@@ -11,16 +11,17 @@ import {
   CardActions,
   Button,
   Tab,
-  AppBar,
 } from "@material-ui/core";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
-import { pink, blue, lightGreen } from "@material-ui/core/colors";
+import { pink, lightGreen } from "@material-ui/core/colors";
 import Carousel from "react-material-ui-carousel";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
-import StarBorderIcon from "@material-ui/icons/StarBorder";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import ProductListItems from "./ProductListItems";
 import defaultLaptop from "../../assets/defaultLaptop.jpg";
+import { showAverage } from "../../functions/rating.js";
+import StarRatings from "react-star-ratings";
+import RatingModal from "../modal/RatingModal";
 const useStyles = makeStyles((theme) => ({
   paperClass: {
     height: 540,
@@ -51,9 +52,9 @@ function secondPart(source, size) {
         "Contact company website for more details"
     : "Contact company website for more details";
 }
-const ProductDetails = ({ product }) => {
+const ProductDetails = ({ product, onStarClick, stars, onOkFunction }) => {
   const classes = useStyles();
-  const { title, images, description } = product;
+  const { title, images, description, _id } = product;
   const [tabValue, setTabValue] = useState("1");
   const handleTabChange = (event, value) => {
     setTabValue(value);
@@ -76,36 +77,39 @@ const ProductDetails = ({ product }) => {
           />
           <hr />
           <CardContent>
+            {product && product.ratings && product.ratings.length > 0 ? (
+              showAverage(product)
+            ) : (
+              <div className="text-center pb-1">No ratings yet</div>
+            )}
             <ProductListItems product={product} />
           </CardContent>
           <CardActions>
             <Grid container justify="between">
               <Button
-                className={"col-md-4"}
+                className="col-md-4"
                 style={{ color: lightGreen[300] }}
                 endIcon={<AddShoppingCartIcon />}
               >
                 Add to Cart
               </Button>
               <Button
-                className={"col-md-4"}
+                className="col-md-4"
                 style={{ color: pink[300] }}
                 endIcon={<FavoriteBorderIcon />}
               >
                 Wishlist
               </Button>
-              <Button
-                className={"col-md-4"}
-                style={{
-                  color: blue[300],
-                  label: {
-                    flexDirection: "column",
-                  },
-                }}
-                endIcon={<StarBorderIcon />}
-              >
-                Rating
-              </Button>
+              <RatingModal onOkFunction={onOkFunction}>
+                <StarRatings
+                  name={_id}
+                  numberOfStars={5}
+                  rating={stars}
+                  changeRating={onStarClick}
+                  isSelectable={true}
+                  starRatedColor="purple"
+                />
+              </RatingModal>
             </Grid>
           </CardActions>
         </Card>
@@ -150,15 +154,10 @@ const ProductDetails = ({ product }) => {
       </div>
       <Paper className={classes.appBar}>
         <TabContext value={tabValue}>
-          <AppBar position="relative" color="secondary">
-            <TabList
-              onChange={handleTabChange}
-              aria-label="simple tabs example"
-            >
-              <Tab label="Description" value="1" />
-              <Tab label="More" value="2" />
-            </TabList>
-          </AppBar>
+          <TabList onChange={handleTabChange} aria-label="simple tabs example">
+            <Tab label="Description" value="1" />
+            <Tab label="More" value="2" />
+          </TabList>
           <br />
           <TabPanel value="1">
             {description && truncate(description, 2000)}
