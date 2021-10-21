@@ -74,7 +74,8 @@ const ProductCard = ({ product, handleAddtoCart }) => {
           </Avatar>
         }
         title={truncate(title, 20)}
-        subheader={truncate(title, 55)}
+        // subheader={truncate(title, 55)}
+        subheader={`Price: ₹${product.price}`}
       />
       {product && product.ratings && product.ratings.length > 0 ? (
         showAverage(product)

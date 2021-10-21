@@ -3,6 +3,9 @@ import { Spin } from "antd";
 import Jumbotron from "../components/cards/Jumbotron";
 import LatestProducts from "./home/LatestProducts";
 import BestSellers from "./home/BestSellers";
+import { Typography } from "@material-ui/core";
+import CategoryList from "../components/category/CategoryList";
+import SubCategoryList from "../components/subcategory/SubCategoryList";
 //import { useSelector } from "react-redux";
 const Home = ({ history }) => {
   const [loading, setLoading] = useState(false);
@@ -37,6 +40,26 @@ const Home = ({ history }) => {
             setLoading={setLoading}
             loading={loading}
           />
+          <Typography
+            variant="h3"
+            color="primary"
+            fontFamily="Quicksand"
+            className="text-center pt-5"
+          >
+            Categories
+          </Typography>
+          <hr />
+          <CategoryList />
+          <Typography
+            variant="h3"
+            color="primary"
+            fontFamily="Quicksand"
+            className="text-center pt-5"
+          >
+            Sub-Categories
+          </Typography>
+          <hr />
+          <SubCategoryList />
         </>
       )}
     </>

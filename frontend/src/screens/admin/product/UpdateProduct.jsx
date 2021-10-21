@@ -34,6 +34,10 @@ const UpdateProduct = ({ history, match }) => {
     "Acer",
     "Dell",
     "MSI",
+    "Redmi",
+    "OnePlus",
+    "OPPO",
+    "Vivo",
   ];
   const { user } = useSelector((state) => ({ ...state }));
   const [loading, setLoading] = useState(false);

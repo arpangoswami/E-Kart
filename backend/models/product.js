@@ -71,6 +71,9 @@ const productSchema = new mongoose.Schema(
         "Dell",
         "MSI",
         "Redmi",
+        "OnePlus",
+        "OPPO",
+        "Vivo",
       ],
     },
     ratings: [

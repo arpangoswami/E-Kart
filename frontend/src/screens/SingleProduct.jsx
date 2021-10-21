@@ -1,14 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { getSingleProduct, updateProductReview } from "../functions/product.js";
-
+import {
+  getSingleProduct,
+  updateProductReview,
+  getRelatedProducts,
+} from "../functions/product";
 import ProductDetails from "../components/cards/ProductDetails";
-import { Typography } from "@material-ui/core";
+import { Typography, Grid } from "@material-ui/core";
 import { useSelector } from "react-redux";
-const SingleProduct = ({ match, history }) => {
+import ProductCard from "../components/cards/ProductCard";
+import LoadingCard from "../components/cards/LoadingCard";
+const SingleProduct = ({ match }) => {
   const [product, setProduct] = useState({});
+  const [related, setRelated] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const [stars, setStars] = useState(0);
   const { user } = useSelector((state) => ({ ...state }));
+  const { slug } = match.params.slug;
+  const handleAddtoCart = () => {};
   const onOkFunction = () => {
     updateProductReview(product._id, stars, user.token)
       .then((res) => {
@@ -35,7 +45,18 @@ const SingleProduct = ({ match, history }) => {
 
   const loadSingleProduct = () => {
     getSingleProduct(match.params.slug)
-      .then((res) => setProduct(res.data))
+      .then((res) => {
+        setProduct(res.data);
+        //load related products
+        getRelatedProducts(res.data._id)
+          .then((response) => {
+            setRelated(response.data);
+            console.log("RELATED PRODUCTS: ", response.data);
+          })
+          .catch((err) =>
+            toast.error(`${err} happened while fetching related products`)
+          );
+      })
       .catch((err) => toast.error(`${err} happened while fetching product`));
   };
 
@@ -49,17 +70,34 @@ const SingleProduct = ({ match, history }) => {
           onOkFunction={onOkFunction}
         />
       </div>
-      <div className="container">
-        <Typography
-          variant="h3"
-          color="primary"
-          fontFamily="Quicksand"
-          className="text-center pt-5"
-        >
-          Related Products
-        </Typography>
-        <hr />
-      </div>
+      {related && related.length > 0 && (
+        <div className="container">
+          <Typography
+            variant="h3"
+            color="primary"
+            fontFamily="Quicksand"
+            className="text-center pt-5"
+          >
+            Related Products
+          </Typography>
+          <hr />
+          <Grid container justify="center">
+            {loading ? (
+              <LoadingCard quantity={3} />
+            ) : (
+              related.map((p) => (
+                <div key={p._id} className="row">
+                  <ProductCard
+                    product={p}
+                    key={p._id}
+                    handleAddtoCart={handleAddtoCart}
+                  />
+                </div>
+              ))
+            )}
+          </Grid>
+        </div>
+      )}
     </div>
   );
 };

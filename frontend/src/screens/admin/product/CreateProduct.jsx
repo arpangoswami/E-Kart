@@ -34,6 +34,9 @@ const CreateProduct = () => {
     "Dell",
     "MSI",
     "Redmi",
+    "OnePlus",
+    "OPPO",
+    "Vivo",
   ];
   const [values, setValues] = useState(initialState);
   const [listOfCategories, setListOfCategories] = useState([]);
@@ -54,6 +57,7 @@ const CreateProduct = () => {
       .catch((err) => {
         setLoading(false);
         toast.error(err.response.data.err);
+        setValues(initialState);
       });
   };
 

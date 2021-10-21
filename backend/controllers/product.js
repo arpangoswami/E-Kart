@@ -102,35 +102,6 @@ exports.getTotalCount = async (req, res) => {
   res.json({ total });
 };
 
-exports.addRating = async (req, res) => {
-  const user = await User.findOne({ email: req.user.email }).exec();
-  const product = await Product.findById(req.params.productId).exec();
-  const { star } = req.body;
-  let existingRatingObject = product.ratings.find(
-    (element) => element.postedBy.toString() === user._id.toString()
-  );
-  if (!existingRatingObject) {
-    let ratingAdded = await Product.findByIdAndUpdate(
-      product._id,
-      {
-        $push: { ratings: { star, postedBy: user._id } },
-      },
-      { new: true }
-    ).exec();
-    console.log("NEW RATING: ", ratingAdded);
-    res.json(ratingAdded);
-  }
-  const ratingUpdated = await Product.updateOne(
-    {
-      ratings: { $elemMatch: existingRatingObject },
-    },
-    { $set: { "ratings.$.star": star } },
-    { new: true }
-  ).exec();
-  console.log("UPDATED RATING: ", ratingUpdated);
-  res.json(ratingUpdated);
-};
-
 exports.productStar = async (req, res) => {
   const product = await Product.findById(req.params.productId).exec();
   const user = await User.findOne({ email: req.user.email }).exec();
@@ -164,5 +135,73 @@ exports.productStar = async (req, res) => {
     ).exec();
     console.log("ratingUpdated", ratingUpdated);
     res.json(ratingUpdated);
+  }
+};
+
+exports.listRelatedProducts = async (req, res) => {
+  const product = await Product.findById(req.params.productId).exec();
+
+  const related = await Product.find({
+    _id: { $ne: product._id },
+    category: product.category,
+  })
+    .limit(3)
+    .populate("category")
+    .populate("subCategories")
+    .exec();
+  res.json(related);
+};
+const handleCategory = async (req, res, category) => {
+  try {
+    let products = await Product.find({ category })
+      .populate("category", "_id name")
+      .populate("subCategories", "_id name")
+      .exec();
+
+    res.json(products);
+  } catch (err) {
+    console.log(err);
+  }
+};
+const handleQuery = async (req, res, query) => {
+  const products = await Product.find({ $text: { $search: query } })
+    .populate("category", "_id name")
+    .populate("subCategories", "_id name")
+    .exec();
+
+  res.json(products);
+};
+
+const handlePrice = async (req, res, price) => {
+  try {
+    let products = await Product.find({
+      price: {
+        $gte: price[0],
+        $lte: price[1],
+      },
+    })
+      .populate("category", "_id name")
+      .populate("subCategories", "_id name")
+      .exec();
+    res.json(products);
+  } catch (err) {
+    console.log("ERROR PRICE: ", err);
+    res.json({
+      err: `Error while fetching by price ${err}`,
+    });
+  }
+};
+
+//SEARCH/FILTER
+exports.searchFilters = async (req, res) => {
+  const { query, price, category } = req.body;
+  if (query) {
+    await handleQuery(req, res, query);
+  }
+  if (price !== undefined) {
+    await handlePrice(req, res, price);
+  }
+  if (category) {
+    await handleCategory(req, res, category);
   }
 };

@@ -105,7 +105,6 @@ const ProductUpdateForm = ({
     subCategories,
     shipping,
     quantity,
-    images,
     color,
     brand,
   } = values;

@@ -18,6 +18,8 @@ const {
   listCountProductsSort,
   getTotalCount,
   productStar,
+  listRelatedProducts,
+  searchFilters,
 } = require("../controllers/product");
 
 router.post("/create-product", authenticationCheck, isAdmin, createProduct);
@@ -44,4 +46,8 @@ router.post("/products/sort", listCountProductsSort);
 
 //ratings
 router.put("/product/add-rating/:productId", authenticationCheck, productStar);
+//related
+router.get("/product/related/:productId", listRelatedProducts);
+//search
+router.post("/search/filter", searchFilters);
 module.exports = router;

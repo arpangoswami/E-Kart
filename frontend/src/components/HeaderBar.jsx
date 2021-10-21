@@ -6,7 +6,6 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
 import Badge from "@material-ui/core/Badge";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
@@ -20,8 +19,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 //icons
 import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
-import FavoriteIcon from "@material-ui/icons/Favorite";
+import StorefrontRoundedIcon from "@material-ui/icons/StorefrontRounded";
+//import FavoriteIcon from "@material-ui/icons/Favorite";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
@@ -32,7 +31,7 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 //user drawer
 import HistoryIcon from "@material-ui/icons/History";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
-import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+// import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import CreateNewFolderIcon from "@material-ui/icons/CreateNewFolder";
 import CreateIcon from "@material-ui/icons/Create";
@@ -42,7 +41,7 @@ import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
+import SearchBar from "./forms/SearchForm";
 import firebase from "firebase";
 
 const drawerWidth = 240;
@@ -163,7 +162,7 @@ export default function HeaderBar({ window }) {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const isMenuOpen = Boolean(anchorEl);
 
-  const [wishlistCount, setWishlistCount] = useState(5);
+  //const [wishlistCount, setWishlistCount] = useState(5);
   const [cartCount, setCartCount] = useState(2);
 
   const dispatcher = useDispatch();
@@ -203,6 +202,10 @@ export default function HeaderBar({ window }) {
     event.preventDefault();
     history.push("/cart");
   };
+  const redirectShop = (event) => {
+    event.preventDefault();
+    history.push("/shop");
+  };
 
   const redirectAdminDashboard = (e) => {
     e.preventDefault();
@@ -211,7 +214,7 @@ export default function HeaderBar({ window }) {
 
   const redirectDashboard = (e) => {
     e.preventDefault();
-    history.push("/user/history");
+    history.push("/user/dashboard");
   };
 
   const handleProfileMenuOpen = (event) => {
@@ -244,11 +247,11 @@ export default function HeaderBar({ window }) {
       icon: <LockOpenIcon color="secondary" />,
       path: "/user/update-password",
     },
-    {
-      text: "Wishlist",
-      icon: <FavoriteBorderIcon color="secondary" />,
-      path: "/user/wishlist",
-    },
+    // {
+    //   text: "Wishlist",
+    //   icon: <FavoriteBorderIcon color="secondary" />,
+    //   path: "/user/wishlist",
+    // },
   ];
   const userDrawer = (
     <div>
@@ -402,14 +405,14 @@ export default function HeaderBar({ window }) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      {/* <MenuItem>
         <IconButton aria-label="show-wishlist" color="inherit">
           <Badge badgeContent={wishlistCount} color="secondary">
             <FavoriteIcon />
           </Badge>
         </IconButton>
         <p>Wishlist</p>
-      </MenuItem>
+      </MenuItem> */}
       <MenuItem onClick={redirectCart}>
         <IconButton aria-label="show-cart" color="inherit">
           <Badge badgeContent={cartCount} color="secondary">
@@ -417,6 +420,12 @@ export default function HeaderBar({ window }) {
           </Badge>
         </IconButton>
         <p>Cart</p>
+      </MenuItem>
+      <MenuItem onClick={redirectShop}>
+        <IconButton aria-label="show-cart" color="inherit">
+          <StorefrontRoundedIcon />
+        </IconButton>
+        <p>Shop</p>
       </MenuItem>
       {!user && (
         <MenuItem onClick={redirectLogin}>
@@ -496,22 +505,10 @@ export default function HeaderBar({ window }) {
           >
             <HomeIcon />
           </IconButton>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </div>
+          <SearchBar />
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton
+            {/* <IconButton
               aria-label="show-wishlist"
               className={classes.lighterAppBarHover}
               color="inherit"
@@ -526,7 +523,7 @@ export default function HeaderBar({ window }) {
                 </Typography>
                 <FavoriteIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
             <IconButton
               aria-label="show-cart"
               className={classes.lighterAppBarHover}
@@ -543,6 +540,21 @@ export default function HeaderBar({ window }) {
                 </Typography>
                 <ShoppingCartIcon />
               </Badge>
+            </IconButton>
+            <IconButton
+              aria-label="show-cart"
+              className={classes.lighterAppBarHover}
+              color="inherit"
+              onClick={redirectShop}
+            >
+              <Typography
+                color="secondary"
+                variant="button"
+                className={classes.appBarText}
+              >
+                Shop
+              </Typography>
+              <StorefrontRoundedIcon />
             </IconButton>
             <IconButton
               edge="end"

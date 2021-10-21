@@ -24,6 +24,8 @@ import UpdateSubCategory from "./screens/admin/subcategory/UpdateSubCategory";
 import ViewAllProducts from "./screens/admin/product/ViewAllProducts";
 import UpdateProduct from "./screens/admin/product/UpdateProduct";
 import SingleProduct from "./screens/SingleProduct";
+import CategoryWiseProducts from "./screens/category/CategoryWiseProducts";
+import SubCategoryWiseProducts from "./screens/subcategory/SubCategoryWiseProducts";
 import { ThemeProvider, createTheme } from "@material-ui/core";
 import { deepPurple, indigo } from "@material-ui/core/colors";
 import { auth } from "./firebase";
@@ -135,6 +137,16 @@ function App() {
               component={UpdateProduct}
             />
             <Route exact path="/product/:slug" component={SingleProduct} />
+            <Route
+              exact
+              path="/category/:slug"
+              component={CategoryWiseProducts}
+            />
+            <Route
+              exact
+              path="/sub-category/:slug"
+              component={SubCategoryWiseProducts}
+            />
           </Switch>
         </Layout>
       </BrowserRouter>
