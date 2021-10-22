@@ -191,10 +191,66 @@ const handlePrice = async (req, res, price) => {
     });
   }
 };
+const handleStars = (req, res, stars) => {
+  Product.aggregate([
+    {
+      $project: {
+        document: "$$ROOT",
+        // title: "$title",
+        floorAverage: {
+          $floor: { $avg: "$ratings.star" }, // floor value of 3.33 will be 3
+        },
+      },
+    },
+    { $match: { floorAverage: stars } },
+  ])
+    .limit(12)
+    .exec((err, aggregates) => {
+      if (err) console.log("AGGREGATE ERROR", err);
+      Product.find({ _id: aggregates })
+        .populate("category", "_id name")
+        .populate("subCategories", "_id name")
+        .exec((err, products) => {
+          if (err) console.log("PRODUCT AGGREGATE ERROR", err);
+          res.json(products);
+        });
+    });
+};
+const handleShipping = async (req, res, shipping) => {
+  const products = await Product.find({ shipping })
+    .populate("category", "_id name")
+    .populate("subCategories", "_id name")
+    .exec();
 
+  res.json(products);
+};
+const handleColor = async (req, res, color) => {
+  const products = await Product.find({ color })
+    .populate("category", "_id name")
+    .populate("subCategories", "_id name")
+    .exec();
+
+  res.json(products);
+};
+const handleBrand = async (req, res, brand) => {
+  const products = await Product.find({ brand })
+    .populate("category", "_id name")
+    .populate("subCategories", "_id name")
+    .exec();
+
+  res.json(products);
+};
+const handleSubCategory = async (req, res, subCategory) => {
+  const products = await Product.find({ subCategories: subCategory })
+    .populate("category", "_id name")
+    .populate("subCategories", "_id name")
+    .exec();
+  res.json(products);
+};
 //SEARCH/FILTER
 exports.searchFilters = async (req, res) => {
-  const { query, price, category } = req.body;
+  const { query, price, category, stars, subCategory, shipping, color, brand } =
+    req.body;
   if (query) {
     await handleQuery(req, res, query);
   }
@@ -203,5 +259,23 @@ exports.searchFilters = async (req, res) => {
   }
   if (category) {
     await handleCategory(req, res, category);
+  }
+  if (stars) {
+    await handleStars(req, res, stars);
+  }
+  if (subCategory) {
+    await handleSubCategory(req, res, subCategory);
+  }
+
+  if (shipping) {
+    await handleShipping(req, res, shipping);
+  }
+
+  if (color) {
+    await handleColor(req, res, color);
+  }
+
+  if (brand) {
+    await handleBrand(req, res, brand);
   }
 };

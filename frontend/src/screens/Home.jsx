@@ -6,6 +6,7 @@ import BestSellers from "./home/BestSellers";
 import { Typography } from "@material-ui/core";
 import CategoryList from "../components/category/CategoryList";
 import SubCategoryList from "../components/subcategory/SubCategoryList";
+import LoadingCard from "../components/cards/LoadingCard";
 //import { useSelector } from "react-redux";
 const Home = ({ history }) => {
   const [loading, setLoading] = useState(false);
@@ -20,9 +21,12 @@ const Home = ({ history }) => {
   return (
     <>
       {loading ? (
-        <div className="container text-center m-4">
-          <Spin spinning={loading} size="large" tip="Loading..." />
-        </div>
+        <>
+          <div className="container text-center m-4">
+            <Spin spinning={loading} size="large" tip="Loading..." />
+          </div>
+          <LoadingCard quantity={6} />
+        </>
       ) : (
         <>
           <div className="jumbotron h1 text-center font-weight-bold text-danger">
