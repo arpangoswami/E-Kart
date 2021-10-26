@@ -38,7 +38,7 @@ const SingleProduct = ({ match }) => {
       );
       existingRating && setStars(existingRating.star);
     }
-  }, []);
+  }, [product.ratings, user]);
   const onStarClick = (newRating, name) => {
     setStars(newRating);
   };
@@ -49,10 +49,7 @@ const SingleProduct = ({ match }) => {
         setProduct(res.data);
         //load related products
         getRelatedProducts(res.data._id)
-          .then((response) => {
-            setRelated(response.data);
-            console.log("RELATED PRODUCTS: ", response.data);
-          })
+          .then((response) => setRelated(response.data))
           .catch((err) =>
             toast.error(`${err} happened while fetching related products`)
           );

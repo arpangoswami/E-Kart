@@ -9,7 +9,7 @@ import LoadingCard from "../../components/cards/LoadingCard";
 import ProductCard from "../../components/cards/ProductCard";
 import { toast } from "react-toastify";
 
-const LatestProducts = ({ loading, setLoading, handleAddtoCart }) => {
+const LatestProducts = ({ loading, setLoading }) => {
   const [latestProducts, setLatestProducts] = useState([]);
   const [page, setPage] = useState(1);
   const [productsCount, setProductsCount] = useState(0);
@@ -51,11 +51,7 @@ const LatestProducts = ({ loading, setLoading, handleAddtoCart }) => {
         ) : (
           latestProducts.map((p) => (
             <div key={p._id} className="row">
-              <ProductCard
-                product={p}
-                key={p._id}
-                handleAddtoCart={handleAddtoCart}
-              />
+              <ProductCard product={p} />
             </div>
           ))
         )}

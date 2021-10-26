@@ -4,20 +4,20 @@ import { toast } from "react-toastify";
 import {
   getProductsByCount,
   fetchProductsByFilter,
-} from "../../functions/product";
-import { getAllCategories } from "../../functions/category";
-import { getAllSubCategories } from "../../functions/subCategory";
+} from "../functions/product";
+import { getAllCategories } from "../functions/category";
+import { getAllSubCategories } from "../functions/subCategory";
 import { useSelector, useDispatch } from "react-redux";
 import { Typography } from "@material-ui/core";
 import { Menu, Slider, Checkbox, Radio } from "antd";
-import ProductCard from "../../components/cards/ProductCard";
+import ProductCard from "../components/cards/ProductCard";
 import {
   DollarCircleOutlined,
   DownSquareOutlined,
   StarOutlined,
   TagsOutlined,
 } from "@ant-design/icons";
-import Stars from "../../components/forms/Stars";
+import Stars from "../components/forms/Stars";
 const { SubMenu } = Menu;
 const Shop = () => {
   const [products, setProducts] = useState([]);
@@ -99,7 +99,6 @@ const Shop = () => {
         toast.error(err);
       });
   };
-  const handleAddtoCart = (slug) => {};
   const handleSlider = (value) => {
     setPrice(value);
     dispatcher({
@@ -432,7 +431,7 @@ const Shop = () => {
                     }}
                     className="h6"
                   >
-                    <TagsOutlined />
+                    <DownSquareOutlined />
                     <span>Brands</span>
                   </div>
                 </>
@@ -453,7 +452,7 @@ const Shop = () => {
                     }}
                     className="h6"
                   >
-                    <TagsOutlined />
+                    <DownSquareOutlined />
                     <span>Colors</span>
                   </div>
                 </>
@@ -474,7 +473,7 @@ const Shop = () => {
                     }}
                     className="h6"
                   >
-                    <TagsOutlined />
+                    <DownSquareOutlined />
                     <span>Shipping</span>
                   </div>
                 </>
@@ -503,13 +502,7 @@ const Shop = () => {
               <div className="row">
                 {products.map((p) => (
                   <div key={p._id} className="col-md-4">
-                    <ProductCard
-                      product={p}
-                      handleAddtoCart={(e) => {
-                        e.preventDefault();
-                        handleAddtoCart(p.slug);
-                      }}
-                    />
+                    <ProductCard product={p} />
                   </div>
                 ))}
               </div>

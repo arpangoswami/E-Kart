@@ -17,7 +17,6 @@ const Home = ({ history }) => {
   //     history.push("/");
   //   }
   // }, [user, history]);
-  const handleAddtoCart = (slug) => {};
   return (
     <>
       {loading ? (
@@ -34,16 +33,8 @@ const Home = ({ history }) => {
               text={["Best Prices", "Original Products", "Latest Products"]}
             />
           </div>
-          <LatestProducts
-            handleAddtoCart={handleAddtoCart}
-            setLoading={setLoading}
-            loading={loading}
-          />
-          <BestSellers
-            handleAddtoCart={handleAddtoCart}
-            setLoading={setLoading}
-            loading={loading}
-          />
+          <LatestProducts setLoading={setLoading} loading={loading} />
+          <BestSellers setLoading={setLoading} loading={loading} />
           <Typography
             variant="h3"
             color="primary"

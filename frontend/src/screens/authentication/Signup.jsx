@@ -17,6 +17,7 @@ import {
 import welcome from "../../assets/welcome.svg";
 import { useSelector } from "react-redux";
 import MailIcon from "@material-ui/icons/Mail";
+import { Link } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   cardClass: {
     maxWidth: 600,
@@ -152,6 +153,11 @@ const Signup = ({ history }) => {
                   Send Email
                 </Button>
               </CardActions>
+              <Grid container justify="flex-end">
+                <Link to="/login" className="text-success pb-4 float-right">
+                  <Typography>Already have an account?</Typography>
+                </Link>
+              </Grid>
             </form>
           </Grid>
         </CardActionArea>

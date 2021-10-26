@@ -5,13 +5,14 @@ import "react-toastify/dist/ReactToastify.css";
 import Login from "./screens/authentication/Login";
 import Signup from "./screens/authentication/Signup";
 import Home from "./screens/Home";
-import Shop from "./screens/Cart/Shop";
-import Cart from "./screens/Cart/Cart";
+import Shop from "./screens/Shop";
+import Cart from "./screens/Cart";
 import SignupComplete from "./screens/authentication/SignupComplete";
 import ForgotPassword from "./screens/authentication/ForgotPassword";
 import UserDashboard from "./screens/user/UserDashboard";
 import Layout from "./components/Layout";
 import UserRoutes from "./components/routes/UserRoutes";
+import LoggedOutRoute from "./components/routes/LoggedOutRoute";
 import AdminRoutes from "./components/routes/AdminRoutes";
 import ChangePassword from "./screens/user/ChangePassword";
 import Wishlist from "./screens/user/Wishlist";
@@ -31,6 +32,7 @@ import { deepPurple, indigo } from "@material-ui/core/colors";
 import { auth } from "./firebase";
 import { useDispatch } from "react-redux";
 import { currentUser } from "./functions/auth";
+import CartSideDrawer from "./components/sideDrawer/CartSideDrawer";
 const theme = createTheme({
   palette: {
     primary: deepPurple,
@@ -75,12 +77,13 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
+        <CartSideDrawer />
         <ToastContainer />
         <Layout>
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/signup" component={Signup} />
-            <Route exact path="/login" component={Login} />
+            <LoggedOutRoute exact path="/login" component={Login} />
             <Route path="/signup/complete" component={SignupComplete} />
             <Route exact path="/shop" component={Shop} />
             <Route exact path="/cart" component={Cart} />

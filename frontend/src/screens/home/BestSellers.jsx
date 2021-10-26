@@ -9,7 +9,7 @@ import LoadingCard from "../../components/cards/LoadingCard";
 import ProductCard from "../../components/cards/ProductCard";
 import { toast } from "react-toastify";
 
-const BestSellers = ({ loading, setLoading, handleAddtoCart }) => {
+const BestSellers = ({ loading, setLoading }) => {
   const [bestSellers, setBestSellers] = useState([]);
   const [productsCount, setProductsCount] = useState(0);
   const [page, setPage] = useState(1);
@@ -51,11 +51,7 @@ const BestSellers = ({ loading, setLoading, handleAddtoCart }) => {
         ) : (
           bestSellers.map((p) => (
             <div key={p._id} className="row">
-              <ProductCard
-                product={p}
-                key={p._id}
-                handleAddtoCart={handleAddtoCart}
-              />
+              <ProductCard product={p} />
             </div>
           ))
         )}

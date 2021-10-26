@@ -24,17 +24,10 @@ const CategoryWiseProducts = ({ match }) => {
         setLoading(false);
       });
   }, []);
-  const handleAddtoCart = (slug) => {};
   const showProducts = () =>
     products.map((product) => (
       <div key={product._id}>
-        <ProductCard
-          product={product}
-          handleAddtoCart={() => {
-            handleAddtoCart(product.slug);
-            console.log(product.slug);
-          }}
-        />
+        <ProductCard product={product} />
       </div>
     ));
   return (

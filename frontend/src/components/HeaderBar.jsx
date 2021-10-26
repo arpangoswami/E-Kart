@@ -11,7 +11,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
-import Drawer from "@material-ui/core/Drawer";
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import Hidden from "@material-ui/core/Hidden";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -163,10 +163,9 @@ export default function HeaderBar({ window }) {
   const isMenuOpen = Boolean(anchorEl);
 
   //const [wishlistCount, setWishlistCount] = useState(5);
-  const [cartCount, setCartCount] = useState(2);
 
   const dispatcher = useDispatch();
-  const { user } = useSelector((state) => {
+  const { user, cart } = useSelector((state) => {
     return { ...state };
   });
 
@@ -415,7 +414,7 @@ export default function HeaderBar({ window }) {
       </MenuItem> */}
       <MenuItem onClick={redirectCart}>
         <IconButton aria-label="show-cart" color="inherit">
-          <Badge badgeContent={cartCount} color="secondary">
+          <Badge badgeContent={cart.length} color="secondary">
             <ShoppingCartIcon />
           </Badge>
         </IconButton>
@@ -530,7 +529,7 @@ export default function HeaderBar({ window }) {
               color="inherit"
               onClick={redirectCart}
             >
-              <Badge badgeContent={cartCount} color="secondary">
+              <Badge badgeContent={cart.length} color="secondary">
                 <Typography
                   color="secondary"
                   variant="button"
@@ -597,7 +596,7 @@ export default function HeaderBar({ window }) {
         {user && user.role !== "admin" && (
           <>
             <Hidden smUp implementation="css">
-              <Drawer
+              <SwipeableDrawer
                 container={container}
                 variant="temporary"
                 anchor={theme.direction === "rtl" ? "right" : "left"}
@@ -611,14 +610,14 @@ export default function HeaderBar({ window }) {
                 }}
               >
                 {userDrawer}
-              </Drawer>
+              </SwipeableDrawer>
             </Hidden>
           </>
         )}
         {user && user.role === "admin" && (
           <>
             <Hidden smUp implementation="css">
-              <Drawer
+              <SwipeableDrawer
                 container={container}
                 variant="temporary"
                 anchor={theme.direction === "rtl" ? "right" : "left"}
@@ -632,7 +631,7 @@ export default function HeaderBar({ window }) {
                 }}
               >
                 {adminDrawer}
-              </Drawer>
+              </SwipeableDrawer>
             </Hidden>
           </>
         )}

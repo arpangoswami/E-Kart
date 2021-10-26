@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { auth, googleAuthentication } from "../../firebase";
 import {
@@ -23,7 +23,7 @@ import {
   EyeFilled,
 } from "@ant-design/icons";
 import login from "../../assets/login.svg";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Spin } from "antd";
 import { Link } from "react-router-dom";
 import { createOrUpdateUser } from "../../functions/auth";
@@ -81,18 +81,11 @@ const Login = ({ history }) => {
   const [pwdError, setPwdError] = useState(false);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(true);
-  const { user } = useSelector((state) => ({ ...state }));
   const dispatcher = useDispatch();
-  useEffect(() => {
-    let intended = history.location.state;
-    if (intended) {
-      return;
-    } else {
-      if (user && user.token) history.push("/");
-    }
-  }, [user, history]);
   const roleBasedRedirect = (res) => {
+    console.log("YOLOYOYO");
     let intended = history.location.state;
+    console.log("INTENDED: ", intended);
     if (intended) {
       history.push(intended.from);
     } else {
@@ -149,11 +142,7 @@ const Login = ({ history }) => {
               _id: res.data._id,
             },
           });
-          if (history.location.state) {
-            history.push(history.location.state.from);
-          } else {
-            roleBasedRedirect(res);
-          }
+          roleBasedRedirect(res);
         })
         .catch((err) => console.log("ERROR SIGN IN: ", err));
     } catch (error) {
@@ -182,11 +171,7 @@ const Login = ({ history }) => {
                 _id: res.data._id,
               },
             });
-            if (history.location.state) {
-              history.push(history.location.state.from);
-            } else {
-              roleBasedRedirect(res);
-            }
+            roleBasedRedirect(res);
           })
           .catch((err) => console.log("ERROR GOOGLE SIGN IN: ", err));
       })
@@ -295,6 +280,9 @@ const Login = ({ history }) => {
                     className="text-danger ml-4 float-right"
                   >
                     <Typography>Forgot Password</Typography>
+                  </Link>
+                  <Link to="/signup" className="text-info ml-4 float-right">
+                    <Typography>Signup?</Typography>
                   </Link>
                 </Grid>
               </CardActions>

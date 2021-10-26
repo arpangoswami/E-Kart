@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   makeStyles,
@@ -22,6 +22,9 @@ import defaultLaptop from "../../assets/defaultLaptop.jpg";
 import { showAverage } from "../../functions/rating.js";
 import StarRatings from "react-star-ratings";
 import RatingModal from "../modal/RatingModal";
+import { Tooltip } from "antd";
+import _ from "lodash";
+import { useSelector, useDispatch } from "react-redux";
 const useStyles = makeStyles((theme) => ({
   paperClass: {
     height: 540,
@@ -56,8 +59,44 @@ const ProductDetails = ({ product, onStarClick, stars, onOkFunction }) => {
   const classes = useStyles();
   const { title, images, description, _id } = product;
   const [tabValue, setTabValue] = useState("1");
+  const dispatch = useDispatch();
+  const { user, cart } = useSelector((state) => ({ ...state }));
+  const [tooltipText, setTooltipText] = useState("Add to Cart");
+  useEffect(() => {
+    for (let i = 0; i < cart.length; i++) {
+      if (cart[i]._id === product._id) {
+        setTooltipText("Already added");
+      }
+    }
+  }, []);
   const handleTabChange = (event, value) => {
     setTabValue(value);
+  };
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    // create cart array
+    let cart = [];
+    if (typeof window !== "undefined") {
+      // if cart is in local storage GET it
+      if (localStorage.getItem("cart")) {
+        cart = JSON.parse(localStorage.getItem("cart"));
+      }
+      // push new product to cart
+      cart.push({
+        ...product,
+        count: 1,
+      });
+      // remove duplicates
+      let unique = _.uniqWith(cart, _.isEqual);
+      // save to local storage
+      // console.log('unique', unique)
+      localStorage.setItem("cart", JSON.stringify(unique));
+      setTooltipText("Already added");
+      dispatch({
+        type: "ADD_TO_CART",
+        payload: unique,
+      });
+    }
   };
   return (
     <>
@@ -86,13 +125,17 @@ const ProductDetails = ({ product, onStarClick, stars, onOkFunction }) => {
           </CardContent>
           <CardActions>
             <Grid container justify="between">
-              <Button
-                className="col-md-4"
-                style={{ color: lightGreen[300] }}
-                endIcon={<AddShoppingCartIcon />}
-              >
-                Add to Cart
-              </Button>
+              <Tooltip title={tooltipText}>
+                <Button
+                  className="col-md-4"
+                  style={{ color: lightGreen[300] }}
+                  endIcon={<AddShoppingCartIcon />}
+                  onClick={handleAddToCart}
+                >
+                  Add to Cart
+                </Button>
+              </Tooltip>
+
               <Button
                 className="col-md-4"
                 style={{ color: pink[300] }}

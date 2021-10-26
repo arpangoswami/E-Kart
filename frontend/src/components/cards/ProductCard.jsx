@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   makeStyles,
@@ -24,8 +24,11 @@ import {
   amber,
 } from "@material-ui/core/colors";
 import defaultLaptop from "../../assets/defaultLaptop.jpg";
+import { Tooltip } from "antd";
 import { Link } from "react-router-dom";
 import { showAverage } from "../../functions/rating.js";
+import { useSelector, useDispatch } from "react-redux";
+import _ from "lodash";
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -48,9 +51,22 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(2),
   },
 }));
-const ProductCard = ({ product, handleAddtoCart }) => {
+const ProductCard = ({ product }) => {
   const classes = useStyles();
   const { title, description, images, slug } = product;
+
+  const dispatch = useDispatch();
+  const { cart } = useSelector((state) => ({ ...state }));
+  const [tooltipText, setTooltipText] = useState("Add to Cart");
+  useEffect(() => {
+    for (let i = 0; i < cart.length; i++) {
+      if (cart[i]._id === product._id) {
+        setTooltipText("Already added");
+      }
+    }
+  }, []);
+
+  //checkIfExists();
   const colors = [
     red[200],
     purple[200],
@@ -60,6 +76,36 @@ const ProductCard = ({ product, handleAddtoCart }) => {
     amber[200],
   ];
   let bgColorAvatar = colors[getRandomInt(0, colors.length - 1)];
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    // create cart array
+    let cart = [];
+    if (typeof window !== "undefined") {
+      // if cart is in local storage GET it
+      if (localStorage.getItem("cart")) {
+        cart = JSON.parse(localStorage.getItem("cart"));
+      }
+      // push new product to cart
+      cart.push({
+        ...product,
+        count: 1,
+      });
+      // remove duplicates
+      let unique = _.uniqWith(cart, _.isEqual);
+      // save to local storage
+      // console.log('unique', unique)
+      localStorage.setItem("cart", JSON.stringify(unique));
+      setTooltipText("Already added");
+      dispatch({
+        type: "ADD_TO_CART",
+        payload: unique,
+      });
+      dispatch({
+        type: "SET_VISIBLE",
+        payload: true,
+      });
+    }
+  };
   return (
     <Card className={classes.cardClass}>
       <CardHeader
@@ -130,18 +176,18 @@ const ProductCard = ({ product, handleAddtoCart }) => {
               View Product
             </Button>
           </Link>
-          <Button
-            endIcon={<AddShoppingCartIcon />}
-            color="#7cb342"
-            style={{ color: teal[300] }}
-            onClick={(e) => {
-              e.preventDefault();
-              handleAddtoCart(slug);
-            }}
-            className="ml-1"
-          >
-            Add to Cart
-          </Button>
+
+          <Tooltip title={tooltipText}>
+            <Button
+              endIcon={<AddShoppingCartIcon />}
+              color="#7cb342"
+              style={{ color: teal[300] }}
+              onClick={handleAddToCart}
+              className="ml-1"
+            >
+              Add to Cart
+            </Button>
+          </Tooltip>
         </Grid>
       </CardActions>
     </Card>
