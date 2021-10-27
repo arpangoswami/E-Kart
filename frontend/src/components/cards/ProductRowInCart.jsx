@@ -15,6 +15,13 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
   },
 }));
+const imageStyle = {
+  justifyContent: "center",
+  display: "flex",
+  height: 140,
+  objectFit: "contain",
+  cursor: "auto",
+};
 export default function ProductRowInCart({ product }) {
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -73,29 +80,24 @@ export default function ProductRowInCart({ product }) {
     <TableRow>
       <TableCell>
         {product.images && product.images.length > 0 ? (
-          <ModalImage
-            style={{
-              height: 140,
-              objectFit: "contain",
-              cursor: "auto",
-            }}
-            className={classes.mediaClass}
-            small={product.images[0].url}
-            large={product.images[0].url}
-            alt={product.title}
-          />
+          <div style={imageStyle}>
+            <ModalImage
+              style={imageStyle}
+              className={classes.mediaClass}
+              small={product.images[0].url}
+              large={product.images[0].url}
+              alt={product.title}
+            />
+          </div>
         ) : (
-          <ModalImage
-            style={{
-              height: 140,
-              objectFit: "contain",
-              cursor: "auto",
-            }}
-            className={classes.mediaClass}
-            small={defaultLaptop}
-            large={defaultLaptop}
-            alt="default image"
-          />
+          <div style={imageStyle}>
+            <ModalImage
+              className={classes.mediaClass}
+              small={defaultLaptop}
+              large={defaultLaptop}
+              alt="default image"
+            />
+          </div>
         )}
       </TableCell>
       <TableCell>{product.title}</TableCell>

@@ -18,6 +18,8 @@ import ChangePassword from "./screens/user/ChangePassword";
 import Wishlist from "./screens/user/Wishlist";
 import AdminDashboard from "./screens/admin/AdminDashboard";
 import ManageCategories from "./screens/admin/category/ManageCategories";
+import CreateCoupon from "./screens/admin/coupon/CreateCoupon";
+import UpdateCoupon from "./screens/admin/coupon/UpdateCoupon";
 import UpdateCategory from "./screens/admin/category/UpdateCategory";
 import CreateProduct from "./screens/admin/product/CreateProduct";
 import ManageSubCategory from "./screens/admin/subcategory/ManageSubCategory";
@@ -27,6 +29,7 @@ import UpdateProduct from "./screens/admin/product/UpdateProduct";
 import SingleProduct from "./screens/SingleProduct";
 import CategoryWiseProducts from "./screens/category/CategoryWiseProducts";
 import SubCategoryWiseProducts from "./screens/subcategory/SubCategoryWiseProducts";
+import Checkout from "./screens/Checkout";
 import { ThemeProvider, createTheme } from "@material-ui/core";
 import { deepPurple, indigo } from "@material-ui/core/colors";
 import { auth } from "./firebase";
@@ -149,6 +152,13 @@ function App() {
               exact
               path="/sub-category/:slug"
               component={SubCategoryWiseProducts}
+            />
+            <UserRoutes exact path="/checkout" component={Checkout} />
+            <AdminRoutes exact path="/admin/coupon" component={CreateCoupon} />
+            <AdminRoutes
+              exact
+              path="/admin/update/coupon/:couponId"
+              component={UpdateCoupon}
             />
           </Switch>
         </Layout>

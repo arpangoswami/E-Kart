@@ -169,7 +169,6 @@ const ProductCard = ({ product }) => {
           <Link to={`/product/${slug}`}>
             <Button
               endIcon={<VisibilityIcon />}
-              color="#7cb342"
               style={{ color: lightGreen[600] }}
               className="mr-2"
             >
@@ -180,7 +179,6 @@ const ProductCard = ({ product }) => {
           <Tooltip title={tooltipText}>
             <Button
               endIcon={<AddShoppingCartIcon />}
-              color="#7cb342"
               style={{ color: teal[300] }}
               onClick={handleAddToCart}
               className="ml-1"

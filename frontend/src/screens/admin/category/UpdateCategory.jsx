@@ -12,9 +12,11 @@ const UpdateCategory = ({ history, match }) => {
 
   useEffect(() => {
     const loadSingleCategory = () => {
-      getCategory(match.params.slug).then((res) =>
-        setCategoryName(res.data.name)
-      );
+      getCategory(match.params.slug)
+        .then((res) => setCategoryName(res.data.name))
+        .catch((err) =>
+          toast.error(`${err} happened while prepopulating the coupon details`)
+        );
     };
     loadSingleCategory();
   }, [match.params.slug]);
