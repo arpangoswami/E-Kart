@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import {
@@ -58,12 +58,12 @@ const CreateCoupon = ({ history }) => {
 
   const [keyword, setKeyword] = useState("");
 
+  const loadCoupons = useCallback(() => {
+    getAllCoupons(user.token).then((c) => setListOfCoupons(c.data));
+  }, [user.token]);
   useEffect(() => {
     loadCoupons();
-  }, []);
-
-  const loadCoupons = () =>
-    getAllCoupons(user.token).then((c) => setListOfCoupons(c.data));
+  }, [loadCoupons]);
 
   const handleDelete = async (event, couponId) => {
     event.preventDefault();
@@ -156,8 +156,7 @@ const CreateCoupon = ({ history }) => {
                 onClick={(event) => {
                   redirectUpdate(event, coupon._id);
                 }}
-                className={classes.leftButton}
-                className="text-info"
+                className={classes.leftButton + "text-info"}
               >
                 <BuildIcon />
               </IconButton>

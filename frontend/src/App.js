@@ -9,7 +9,7 @@ import Shop from "./screens/Shop";
 import Cart from "./screens/Cart";
 import SignupComplete from "./screens/authentication/SignupComplete";
 import ForgotPassword from "./screens/authentication/ForgotPassword";
-import UserDashboard from "./screens/user/UserDashboard";
+import UserHistory from "./screens/user/UserHistory";
 import Layout from "./components/Layout";
 import UserRoutes from "./components/routes/UserRoutes";
 import LoggedOutRoute from "./components/routes/LoggedOutRoute";
@@ -30,6 +30,7 @@ import SingleProduct from "./screens/SingleProduct";
 import CategoryWiseProducts from "./screens/category/CategoryWiseProducts";
 import SubCategoryWiseProducts from "./screens/subcategory/SubCategoryWiseProducts";
 import Checkout from "./screens/Checkout";
+import Payment from "./screens/Payment";
 import { ThemeProvider, createTheme } from "@material-ui/core";
 import { deepPurple, indigo } from "@material-ui/core/colors";
 import { auth } from "./firebase";
@@ -91,11 +92,7 @@ function App() {
             <Route exact path="/shop" component={Shop} />
             <Route exact path="/cart" component={Cart} />
             <Route exact path="/forgot/password" component={ForgotPassword} />
-            <UserRoutes
-              exact
-              path="/user/dashboard"
-              component={UserDashboard}
-            />
+            <UserRoutes exact path="/user/history" component={UserHistory} />
             <UserRoutes exact path="/user/wishlist" component={Wishlist} />
             <UserRoutes
               exact
@@ -160,6 +157,7 @@ function App() {
               path="/admin/update/coupon/:couponId"
               component={UpdateCoupon}
             />
+            <UserRoutes exact path="/payment" component={Payment} />
           </Switch>
         </Layout>
       </BrowserRouter>

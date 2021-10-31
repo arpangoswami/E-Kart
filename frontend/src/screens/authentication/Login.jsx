@@ -58,8 +58,6 @@ const useStyles = makeStyles((theme) => ({
   },
   attrField: {
     width: "115%",
-    //marginTop: theme.spacing(2),
-    // marginBottom: theme.spacing(2),
     paddingRight: theme.spacing(6),
   },
   btn: {
@@ -83,9 +81,7 @@ const Login = ({ history }) => {
   const [showPassword, setShowPassword] = useState(true);
   const dispatcher = useDispatch();
   const roleBasedRedirect = (res) => {
-    console.log("YOLOYOYO");
     let intended = history.location.state;
-    console.log("INTENDED: ", intended);
     if (intended) {
       history.push(intended.from);
     } else {

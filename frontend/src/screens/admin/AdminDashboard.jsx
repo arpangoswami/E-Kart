@@ -1,19 +1,35 @@
-import React, { useState } from "react";
-import { Spin } from "antd";
+import React, { useState, useEffect, useCallback } from "react";
+import { getAllOrders, changeOrderStatus } from "../../functions/admin";
+import { useSelector } from "react-redux";
+import Orders from "../../components/order/Orders";
+import { toast } from "react-toastify";
 const AdminDashboard = () => {
-  const [loading, setLoading] = useState(false);
+  const { user } = useSelector((state) => ({ ...state }));
+  const [orders, setOrders] = useState([]);
+  const loadAllOrders = useCallback(() => {
+    getAllOrders(user.token)
+      .then((res) => setOrders(res.data))
+      .catch((err) => toast.error(`${err} happened while fetching orders`));
+  }, [user.token]);
+  useEffect(() => {
+    loadAllOrders();
+  }, [loadAllOrders]);
+  const handleStatusChange = (orderId, orderStatus) => {
+    changeOrderStatus(orderId, orderStatus, user.token)
+      .then((res) => {
+        toast.success("Order Updated");
+        loadAllOrders();
+      })
+      .catch((err) =>
+        toast.error(`${err} happened while changing order status`)
+      );
+  };
   return (
     <div className="container-fluid">
       <div className="row">
-        {loading ? (
-          <div className="container text-center">
-            <Spin spinning={loading} size="large" tip="Loading..." />
-          </div>
-        ) : (
-          <div className="col">
-            <h1>Admin Dashboard</h1>
-          </div>
-        )}
+        <div className="col">
+          <Orders orders={orders} handleStatusChange={handleStatusChange} />
+        </div>
       </div>
     </div>
   );

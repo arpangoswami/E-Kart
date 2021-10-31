@@ -213,7 +213,7 @@ export default function HeaderBar({ window }) {
 
   const redirectDashboard = (e) => {
     e.preventDefault();
-    history.push("/user/dashboard");
+    history.push("/user/history");
   };
 
   const handleProfileMenuOpen = (event) => {
@@ -232,9 +232,9 @@ export default function HeaderBar({ window }) {
   };
   const userItems = [
     {
-      text: "User Dashboard",
+      text: "User History",
       icon: <DashboardIcon color="secondary" />,
-      path: "/user/dashboard",
+      path: "/user/history",
     },
     {
       text: "History",
@@ -379,7 +379,7 @@ export default function HeaderBar({ window }) {
           <IconButton aria-label="signup" color="inherit">
             <DashboardIcon />
           </IconButton>
-          <p>Dashboard</p>
+          <p>History</p>
         </MenuItem>
       )}
     </Menu>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import {
   getSingleProduct,
@@ -17,7 +17,6 @@ const SingleProduct = ({ match }) => {
 
   const [stars, setStars] = useState(0);
   const { user } = useSelector((state) => ({ ...state }));
-  const { slug } = match.params.slug;
   const handleAddtoCart = () => {};
   const onOkFunction = () => {
     updateProductReview(product._id, stars, user.token)
@@ -28,9 +27,27 @@ const SingleProduct = ({ match }) => {
         toast.error(err);
       });
   };
+  const loadSingleProduct = useCallback(() => {
+    getSingleProduct(match.params.slug)
+      .then((res) => {
+        setProduct(res.data);
+        setLoading(true);
+        //load related products
+        getRelatedProducts(res.data._id)
+          .then((response) => {
+            setRelated(response.data);
+            setLoading(false);
+          })
+          .catch((err) => {
+            toast.error(`${err} happened while fetching related products`);
+            setLoading(false);
+          });
+      })
+      .catch((err) => toast.error(`${err} happened while fetching product`));
+  }, [match.params.slug]);
   useEffect(() => {
     loadSingleProduct();
-  }, [match.params.slug]);
+  }, [loadSingleProduct]);
   useEffect(() => {
     if (product.ratings && user) {
       let existingRating = product.ratings.find(
@@ -41,20 +58,6 @@ const SingleProduct = ({ match }) => {
   }, [product.ratings, user]);
   const onStarClick = (newRating, name) => {
     setStars(newRating);
-  };
-
-  const loadSingleProduct = () => {
-    getSingleProduct(match.params.slug)
-      .then((res) => {
-        setProduct(res.data);
-        //load related products
-        getRelatedProducts(res.data._id)
-          .then((response) => setRelated(response.data))
-          .catch((err) =>
-            toast.error(`${err} happened while fetching related products`)
-          );
-      })
-      .catch((err) => toast.error(`${err} happened while fetching product`));
   };
 
   return (

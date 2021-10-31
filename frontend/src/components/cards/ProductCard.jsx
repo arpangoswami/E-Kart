@@ -64,7 +64,7 @@ const ProductCard = ({ product }) => {
         setTooltipText("Already added");
       }
     }
-  }, []);
+  }, [cart, product]);
 
   //checkIfExists();
   const colors = [
@@ -170,22 +170,31 @@ const ProductCard = ({ product }) => {
             <Button
               endIcon={<VisibilityIcon />}
               style={{ color: lightGreen[600] }}
-              className="mr-2"
             >
               View Product
             </Button>
           </Link>
 
-          <Tooltip title={tooltipText}>
+          {product.quantity > 0 ? (
+            <Tooltip title={tooltipText}>
+              <Button
+                endIcon={<AddShoppingCartIcon />}
+                style={{ color: teal[300] }}
+                onClick={handleAddToCart}
+                className="ml-1"
+              >
+                Add to Cart
+              </Button>
+            </Tooltip>
+          ) : (
             <Button
               endIcon={<AddShoppingCartIcon />}
-              style={{ color: teal[300] }}
-              onClick={handleAddToCart}
-              className="ml-1"
+              className="text-danger"
+              disabled
             >
-              Add to Cart
+              Out of Stock
             </Button>
-          </Tooltip>
+          )}
         </Grid>
       </CardActions>
     </Card>

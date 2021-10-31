@@ -13,10 +13,17 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSelector, useDispatch } from "react-redux";
-import { getUserCart, emptyUserCart, userAddressSave } from "../functions/cart";
+import {
+  getUserCart,
+  emptyUserCart,
+  userAddressSave,
+  applyCoupon,
+  getUserAddress,
+} from "../functions/cart";
 import deliveryAddress from "../assets/deliveryAddress.svg";
 import RoomIcon from "@material-ui/icons/Room";
 import { toast } from "react-toastify";
+import { yellow } from "@material-ui/core/colors";
 const useStyles = makeStyles((theme) => ({
   paperClass: {
     maxWidth: 800,
@@ -70,40 +77,78 @@ const imageStyle = {
   justifyContent: "center",
   display: "flex",
 };
-const Checkout = () => {
+const Checkout = ({ history }) => {
   const [address, setAddress] = useState("");
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
-  const [addressSaved, setAddressSaved] = useState(false);
   const [couponName, setCouponName] = useState("");
+  const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
+  const [discountError, setDiscountError] = useState(false);
+  const [discErr, setDiscErr] = useState("");
+  const [addressAvailable, setAddressAvailable] = useState(false);
   const dispatch = useDispatch();
   const classes = useStyles();
-  const { user, cart } = useSelector((state) => ({ ...state }));
+  const { user } = useSelector((state) => ({ ...state }));
   useEffect(() => {
     getUserCart(user.token)
       .then((res) => {
         setProducts(res.data.products);
         setTotal(res.data.cartTotal);
-        console.log("PRODUCTS: ", res.data.products);
+        setTotalAfterDiscount(res.data.cartTotal);
+        //console.log("PRODUCTS: ", res.data.products);
       })
       .catch((err) => toast.error(`${err} happened while fetching cart`));
-  }, []);
+    getUserAddress(user.token)
+      .then((res) => {
+        if (res.data.ok) {
+          setAddress(res.data.address);
+          setAddressAvailable(true);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, [user.token]);
   const saveAddressToDB = (e) => {
     e.preventDefault();
     userAddressSave(address, user.token)
       .then((res) => {
         if (res.data.ok) {
-          setAddressSaved(true);
           toast.success("New address saved");
         }
       })
       .catch((err) => toast.error(`${err} saving address to the database`));
   };
-  const saveOrderToDB = (e) => {
+  const updateAddressHandler = (e) => {
     e.preventDefault();
+    setAddressAvailable(false);
+    setAddress("");
   };
-  const applyCoupon = (e) => {
+  const applyCouponBtn = (e) => {
     e.preventDefault();
+    applyCoupon({ coupon: couponName }, user.token)
+      .then((res) => {
+        if (res.data.totalAfterCoupon) {
+          setDiscountError(false);
+          toast.success("Coupon successfully applied");
+          setDiscErr("");
+          setTotalAfterDiscount(res.data.totalAfterCoupon);
+          dispatch({
+            type: "COUPON_APPLIED",
+            payload: true,
+          });
+        } else if (res.data.err) {
+          setDiscountError(true);
+          setDiscErr(res.data.err);
+          toast.error(res.data.err);
+          dispatch({
+            type: "COUPON_APPLIED",
+            payload: false,
+          });
+        }
+      })
+      .catch((err) => {
+        toast.error(err);
+        setDiscountError(true);
+      });
   };
   const emptyCartBtn = (e) => {
     e.preventDefault();
@@ -124,6 +169,30 @@ const Checkout = () => {
       })
       .catch((err) => toast.error(`${err} happened while emptying cart`));
   };
+  const oldAddress = () => {
+    if (addressAvailable) {
+      return (
+        <div className="text-center">
+          <Typography variant="h6" className="p-1" color="primary">
+            Address given:-{" "}
+          </Typography>
+          <br />
+          <Typography variant="body1">{address}</Typography>
+          <Grid justify="center">
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={updateAddressHandler}
+              className="m-3"
+            >
+              Change Address?
+            </Button>
+          </Grid>
+        </div>
+      );
+    }
+    return <></>;
+  };
   const showAddressField = (
     <Paper className={classes.paperClass}>
       <Typography
@@ -136,37 +205,45 @@ const Checkout = () => {
         Delivery Address
       </Typography>
       <Divider />
+
       <div style={imageStyle}>
-        <img src={deliveryAddress} className={classes.media} />
-      </div>
-      <form onSubmit={saveAddressToDB}>
-        <TextField
-          name="description"
-          onChange={(e) => setAddress(e.target.value)}
-          className={classes.attrField}
-          label="Enter address"
-          helperText="Enter your address for the deilvery..."
-          variant="outlined"
-          required
-          fullWidth
-          multiline
-          value={address}
-          rows={4}
+        <img
+          src={deliveryAddress}
+          className={classes.media}
+          alt={deliveryAddress}
         />
-        <Grid container justify="center">
-          <Button
-            type="submit"
-            onClick={saveAddressToDB}
-            color="secondary"
+      </div>
+      {oldAddress()}
+      {!addressAvailable && (
+        <form onSubmit={saveAddressToDB}>
+          <TextField
+            name="description"
+            onChange={(e) => setAddress(e.target.value)}
+            className={classes.attrField}
+            label="Enter address"
+            helperText="Enter your address for the deilvery..."
             variant="outlined"
-            disabled={!address}
-            className="m-3"
-            endIcon={<RoomIcon />}
-          >
-            Save
-          </Button>
-        </Grid>
-      </form>
+            required
+            fullWidth
+            multiline
+            value={address}
+            rows={4}
+          />
+          <Grid container justify="center">
+            <Button
+              type="submit"
+              onClick={saveAddressToDB}
+              color="secondary"
+              variant="outlined"
+              disabled={!address}
+              className="m-3"
+              endIcon={<RoomIcon />}
+            >
+              Update your address
+            </Button>
+          </Grid>
+        </form>
+      )}
     </Paper>
   );
   const showCouponField = (
@@ -179,6 +256,18 @@ const Checkout = () => {
       >
         Have a coupon?
       </Typography>
+      {discErr && (
+        <p className="bg-danger p-2">
+          <Typography
+            variant="body2"
+            style={{ color: yellow[100] }}
+            fontFamily="Quicksand"
+            className="text-center"
+          >
+            {discErr}
+          </Typography>
+        </p>
+      )}
       <TextField
         name="Coupon"
         placeholder="Eg:- ARPA100"
@@ -189,6 +278,7 @@ const Checkout = () => {
         helperText="At least 2 characters"
         required
         className={classes.attrField2}
+        error={discountError}
       />
       <Grid container justify="center">
         <Button
@@ -196,6 +286,7 @@ const Checkout = () => {
           className="m-2"
           variant="outlined"
           color="secondary"
+          onClick={applyCouponBtn}
         >
           Apply
         </Button>
@@ -232,15 +323,24 @@ const Checkout = () => {
               <strong>₹{total}</strong>
             </TableCell>
           </TableRow>
+          <TableRow>
+            <TableCell className="text-success">Total After coupon:-</TableCell>
+            <TableCell>
+              <strong>₹{Math.ceil(totalAfterDiscount)}</strong>
+            </TableCell>
+          </TableRow>
         </Table>
         <Grid container justify="center">
           <div className="col-md-6">
             <Grid container justify="center">
               <Button
                 color="primary"
-                disabled={!addressSaved || !products || products.length === 0}
+                disabled={
+                  !addressAvailable || !products || products.length === 0
+                }
                 variant="outlined"
                 className="m-4"
+                onClick={() => history.push("/payment")}
               >
                 Place Order
               </Button>

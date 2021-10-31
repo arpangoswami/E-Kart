@@ -60,7 +60,7 @@ const ProductDetails = ({ product, onStarClick, stars, onOkFunction }) => {
   const { title, images, description, _id } = product;
   const [tabValue, setTabValue] = useState("1");
   const dispatch = useDispatch();
-  const { user, cart } = useSelector((state) => ({ ...state }));
+  const { cart } = useSelector((state) => ({ ...state }));
   const [tooltipText, setTooltipText] = useState("Add to Cart");
   useEffect(() => {
     for (let i = 0; i < cart.length; i++) {
@@ -68,7 +68,7 @@ const ProductDetails = ({ product, onStarClick, stars, onOkFunction }) => {
         setTooltipText("Already added");
       }
     }
-  }, []);
+  }, [cart, product]);
   const handleTabChange = (event, value) => {
     setTabValue(value);
   };

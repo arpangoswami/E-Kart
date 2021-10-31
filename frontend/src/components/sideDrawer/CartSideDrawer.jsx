@@ -57,11 +57,7 @@ export default function CartSideDrawer() {
         cart = JSON.parse(localStorage.getItem("cart"));
       }
 
-      cart.map((prod, i) => {
-        if (prod._id === product._id) {
-          cart.splice(i, 1);
-        }
-      });
+      cart.map((prod, i) => prod._id === product._id && cart.splice(i, 1));
 
       localStorage.setItem("cart", JSON.stringify(cart));
       dispatch({

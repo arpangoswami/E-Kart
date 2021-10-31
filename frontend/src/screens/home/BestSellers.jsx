@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Grid, Typography } from "@material-ui/core";
 import Pagination from "@material-ui/lab/Pagination";
 import {
@@ -13,17 +13,7 @@ const BestSellers = ({ loading, setLoading }) => {
   const [bestSellers, setBestSellers] = useState([]);
   const [productsCount, setProductsCount] = useState(0);
   const [page, setPage] = useState(1);
-  useEffect(() => {
-    loadLatest();
-  }, [page]);
-  useEffect(() => {
-    getTotalProductCount().then((res) => setProductsCount(res.data.total));
-  }, []);
-  const handleChange = (event, value) => {
-    event.preventDefault();
-    setPage(value);
-  };
-  const loadLatest = () => {
+  const loadLatest = useCallback(() => {
     getProductsSorted("sold", "desc", page)
       .then((res) => {
         setLoading(false);
@@ -33,6 +23,16 @@ const BestSellers = ({ loading, setLoading }) => {
         setLoading(false);
         toast.error(`${err} happened while fetching products`);
       });
+  }, [page, setLoading]);
+  useEffect(() => {
+    loadLatest();
+  }, [loadLatest]);
+  useEffect(() => {
+    getTotalProductCount().then((res) => setProductsCount(res.data.total));
+  }, []);
+  const handleChange = (event, value) => {
+    event.preventDefault();
+    setPage(value);
   };
   return (
     <div className="container">

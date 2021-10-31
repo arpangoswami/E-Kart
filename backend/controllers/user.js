@@ -2,6 +2,7 @@ const Product = require("../models/product");
 const User = require("../models/user");
 const Cart = require("../models/cart");
 const Coupon = require("../models/coupon");
+const Order = require("../models/order");
 exports.userCart = async (req, res) => {
   const { cart } = req.body;
   let products = [];
@@ -63,7 +64,7 @@ exports.applyToUserCart = async (req, res) => {
   const { coupon } = req.body;
   const validCoupon = await Coupon.findOne({ name: coupon }).exec();
   if (!validCoupon) {
-    return res.status(400).json({ err: "Invalid Coupon" });
+    return res.json({ err: "Invalid Coupon" });
   }
   const user = await User.findOne({ email: req.user.email }).exec();
   let { products, cartTotal } = await Cart.findOne({
@@ -77,8 +78,75 @@ exports.applyToUserCart = async (req, res) => {
   ).toFixed(2);
   Cart.findOneAndUpdate(
     { orderedBy: user._id },
-    { totalAfterCoupon },
+    { totalAfterDiscount: totalAfterCoupon },
+    { new: true }
+  ).exec();
+  res.json({ totalAfterCoupon });
+};
+
+exports.getAddress = async (req, res) => {
+  const user = await User.findOne({ email: req.user.email }).exec();
+  if (user.address) {
+    return res.json({ ok: true, address: user.address });
+  }
+  res.json({ ok: false });
+};
+
+exports.createOrder = async (req, res) => {
+  const user = await User.findOne({ email: req.user.email }).exec();
+  const { paymentIntent } = req.body.stripeResponse;
+  let { products } = await Cart.findOne({ orderedBy: user._id }).exec();
+  let newOrder = await new Order({
+    products,
+    paymentIntent,
+    orderedBy: user._id,
+  }).save();
+  let bulkOption = products.map((item) => {
+    return {
+      updateOne: {
+        filter: { _id: item.product._id },
+        update: { $inc: { quantity: -item.count, sold: +item.count } },
+      },
+    };
+  });
+  let updated = await Product.bulkWrite(bulkOption, {});
+  res.json({ ok: true });
+};
+
+exports.orderByUser = async (req, res) => {
+  const user = await User.findOne({ email: req.user.email }).exec();
+  let ordersMade = await Order.find({ orderedBy: user._id })
+    .populate("products.product")
+    .exec();
+  //console.log("ORDERS: ", ordersMade);
+  res.json(ordersMade);
+};
+
+exports.addToWishlist = async (req, res) => {
+  const { productId } = req.body;
+  const user = await User.findOne({ email: req.user.email }).exec();
+  const wishlistUpdated = await User.findOneAndUpdate(
+    { _id: user._id },
+    { $addToSet: { wishlist: productId } },
     { new: true }
   );
-  res.json({ totalAfterCoupon });
+  res.json({ ok: true });
+};
+
+exports.getWishlist = async (req, res) => {
+  const wishlist = await User.findOne({ email: req.user.email })
+    .select("wishlist")
+    .populate("wishlist")
+    .exec();
+  res.json(wishlist);
+};
+
+exports.removeFromWishlist = async (req, res) => {
+  const { productId } = req.params;
+  const user = await User.findOneAndUpdate(
+    { email: req.user.email },
+    { $pull: { wishlist: productId } },
+    { new: true }
+  ).exec();
+  res.json({ ok: true });
 };

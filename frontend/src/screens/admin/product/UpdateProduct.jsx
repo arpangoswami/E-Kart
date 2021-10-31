@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-//import ProductCreateForm from "../../../components/forms/ProductCreateForm";
 import ProductUpdateForm from "../../../components/forms/ProductUpdateForm";
 import { getSingleProduct, updateProduct } from "../../../functions/product";
 import {
@@ -43,24 +42,17 @@ const UpdateProduct = ({ history, match }) => {
   const [loading, setLoading] = useState(false);
   const [listOfCategories, setListOfCategories] = useState([]);
   const [listOfSubCategories, setListOfSubCategories] = useState([]);
-  //const [arrayOfCategoryIDs,setArrayOfCategoryIDs] = useState([]);
   const [arrayOfSubIDs, setArrayOfSubIDs] = useState([]);
   const [cateId, setCateId] = useState("");
   const { slug } = match.params;
   const [values, setValues] = useState(initialState);
-  useEffect(() => {
-    loadSingleProduct();
-    loadCategories();
-  }, []);
-
-  const loadSingleProduct = () => {
+  const loadSingleProduct = useCallback(() => {
     getSingleProduct(slug)
       .then((res) => {
         setValues({ ...values, ...res.data });
         getAllChildSubCategories(res.data.category._id)
           .then((res) => {
             setListOfSubCategories(res.data);
-            //console.log("HERE11111: ", res.data);
           })
           .catch((err) => {
             if (err.response.data.err)
@@ -78,10 +70,14 @@ const UpdateProduct = ({ history, match }) => {
         console.log("ERROR IN PRODUCT UPDATION API CALL", err);
         toast.error(err);
       });
-  };
-
-  const loadCategories = () =>
+  }, [slug, values]);
+  const loadCategories = useCallback(() => {
     getAllCategories().then((c) => setListOfCategories(c.data));
+  }, []);
+  useEffect(() => {
+    loadSingleProduct();
+    loadCategories();
+  }, [loadSingleProduct, loadCategories]);
 
   const handleSubmitForm = async (e) => {
     e.preventDefault();

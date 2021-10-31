@@ -23,7 +23,7 @@ const SubCategoryWiseProducts = ({ match }) => {
         );
         setLoading(false);
       });
-  }, []);
+  }, [slug]);
   const showProducts = () =>
     products.map((product) => (
       <div key={product._id}>

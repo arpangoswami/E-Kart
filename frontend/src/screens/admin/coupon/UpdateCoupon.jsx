@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { getSingleCoupon, updateCoupon } from "../../../functions/coupon";
@@ -11,10 +11,8 @@ const UpdateCoupon = ({ history, match }) => {
   const [couponName, setCouponName] = useState("");
   const [expiryDate, setExpiryDate] = useState(new Date("2022-12-31T23:59:59"));
   const [discountPercent, setDiscountPercent] = useState(1);
-  useEffect(() => {
-    loadSingleCoupon();
-  }, []);
-  const loadSingleCoupon = () => {
+
+  const loadSingleCoupon = useCallback(() => {
     getSingleCoupon(match.params.couponId, user.token)
       .then((res) => {
         setCouponName(res.data.name);
@@ -24,7 +22,10 @@ const UpdateCoupon = ({ history, match }) => {
       .catch((err) =>
         toast.error(`${err} happened while prepopulating the coupon details`)
       );
-  };
+  }, [match.params.couponId, user.token]);
+  useEffect(() => {
+    loadSingleCoupon();
+  }, [loadSingleCoupon]);
   const handleSubmitForm = async (event) => {
     event.preventDefault();
     setLoading(true);

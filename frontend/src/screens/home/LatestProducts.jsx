@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Grid, Typography } from "@material-ui/core";
 import Pagination from "@material-ui/lab/Pagination";
 import {
@@ -13,13 +13,7 @@ const LatestProducts = ({ loading, setLoading }) => {
   const [latestProducts, setLatestProducts] = useState([]);
   const [page, setPage] = useState(1);
   const [productsCount, setProductsCount] = useState(0);
-  useEffect(() => {
-    loadLatest();
-  }, [page]);
-  useEffect(() => {
-    getTotalProductCount().then((res) => setProductsCount(res.data.total));
-  }, []);
-  const loadLatest = () => {
+  const loadLatest = useCallback(() => {
     getProductsSorted("createdAt", "desc", page)
       .then((res) => {
         setLoading(false);
@@ -29,7 +23,13 @@ const LatestProducts = ({ loading, setLoading }) => {
         setLoading(false);
         toast.error(`${err} happened while fetching products`);
       });
-  };
+  }, [page, setLoading]);
+  useEffect(() => {
+    loadLatest();
+  }, [loadLatest]);
+  useEffect(() => {
+    getTotalProductCount().then((res) => setProductsCount(res.data.total));
+  }, []);
   const handleChange = (event, value) => {
     event.preventDefault();
     setPage(value);

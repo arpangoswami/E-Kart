@@ -27,17 +27,11 @@ const Shop = () => {
   const [categories, setCategories] = useState([]);
   const [categoryIDs, setCategoryIDs] = useState([]);
   const [stars, setStars] = useState("");
-  const [sub, setSubs] = useState("");
+  const [subCat, setSubs] = useState("");
   const [subCategories, setSubCategories] = useState([]);
-  const [colors, setColors] = useState([
-    "Black",
-    "Brown",
-    "Silver",
-    "White",
-    "Blue",
-  ]);
+  const colors = ["Black", "Brown", "Silver", "White", "Blue"];
   const [color, setColor] = useState("");
-  const [brands, setBrands] = useState([
+  const brands = [
     "Apple",
     "Samsung",
     "Microsoft",
@@ -52,7 +46,7 @@ const Shop = () => {
     "OnePlus",
     "OPPO",
     "Vivo",
-  ]);
+  ];
   const [brand, setBrand] = useState("");
   const [shipping, setShipping] = useState("");
 
@@ -70,7 +64,11 @@ const Shop = () => {
         console.log(`${err} happened while fetching subcategories`)
       );
   }, []);
-
+  const fetchProducts = (arg) => {
+    fetchProductsByFilter(arg)
+      .then((res) => setProducts(res.data))
+      .catch((err) => console.log(`${err} happened while fetching products`));
+  };
   useEffect(() => {
     if (!text) {
       loadProducts();
@@ -85,8 +83,11 @@ const Shop = () => {
   }, [text]);
   //3. load products based on price range
   useEffect(() => {
-    fetchProducts({ price });
-  }, [ok]);
+    const delayed = setTimeout(() => {
+      fetchProducts({ price });
+    }, 300);
+    return () => clearTimeout(delayed);
+  }, [ok, price]);
   const loadProducts = () => {
     setLoading(true);
     getProductsByCount(12)
@@ -178,11 +179,7 @@ const Shop = () => {
       loadProducts();
     }
   };
-  const fetchProducts = (arg) => {
-    fetchProductsByFilter(arg)
-      .then((res) => setProducts(res.data))
-      .catch((err) => console.log(`${err} happened while fetching products`));
-  };
+
   const handleSub = (sub) => {
     dispatcher({
       type: "SEARCH_QUERY",
@@ -194,7 +191,7 @@ const Shop = () => {
     setPrice([0, 99999]);
     setCategoryIDs([]);
     setStars("");
-    fetchProducts({ subCategory: sub });
+    fetchProducts({ subCategory: subCat });
   };
   const showSubCategories = subCategories.map((s) => (
     <div
