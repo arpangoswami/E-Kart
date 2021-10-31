@@ -82,3 +82,31 @@ exports.applyToUserCart = async (req, res) => {
   );
   res.json({ totalAfterCoupon });
 };
+exports.addToWishlist = async (req, res) => {
+  const { productId } = req.body;
+  const user = await User.findOne({ email: req.user.email }).exec();
+  const wishlistUpdated = await User.findOneAndUpdate(
+    { _id: user._id },
+    { $addToSet: { wishlist: productId } },
+    { new: true }
+  );
+  res.json({ ok: true });
+};
+
+exports.getWishlist = async (req, res) => {
+  const wishlist = await User.findOne({ email: req.user.email })
+    .select("wishlist")
+    .populate("wishlist")
+    .exec();
+  res.json(wishlist);
+};
+
+exports.removeFromWishlist = async (req, res) => {
+  const { productId } = req.params;
+  const user = await User.findOneAndUpdate(
+    { email: req.user.email },
+    { $pull: { wishlist: productId } },
+    { new: true }
+  ).exec();
+  res.json({ ok: true });
+};
