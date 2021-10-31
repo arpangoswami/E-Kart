@@ -121,7 +121,6 @@ exports.orderByUser = async (req, res) => {
   //console.log("ORDERS: ", ordersMade);
   res.json(ordersMade);
 };
-
 exports.addToWishlist = async (req, res) => {
   const { productId } = req.body;
   const user = await User.findOne({ email: req.user.email }).exec();
