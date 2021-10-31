@@ -83,7 +83,6 @@ exports.applyToUserCart = async (req, res) => {
   ).exec();
   res.json({ totalAfterCoupon });
 };
-<<<<<<< HEAD
 
 exports.getAddress = async (req, res) => {
   const user = await User.findOne({ email: req.user.email }).exec();
