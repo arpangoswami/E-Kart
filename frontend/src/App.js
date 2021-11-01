@@ -92,7 +92,7 @@ function App() {
           console.log(`${err} happened while fetching user's wishlist`)
         );
     }
-  }, [user]);
+  }, [user, dispatcher]);
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
