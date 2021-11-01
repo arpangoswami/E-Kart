@@ -19,6 +19,7 @@ import {
   userAddressSave,
   applyCoupon,
   getUserAddress,
+  createCashOrder,
 } from "../functions/cart";
 import deliveryAddress from "../assets/deliveryAddress.svg";
 import RoomIcon from "@material-ui/icons/Room";
@@ -88,7 +89,9 @@ const Checkout = ({ history }) => {
   const [addressAvailable, setAddressAvailable] = useState(false);
   const dispatch = useDispatch();
   const classes = useStyles();
-  const { user } = useSelector((state) => ({ ...state }));
+  const { user, cashOnDelivery, coupon } = useSelector((state) => ({
+    ...state,
+  }));
   useEffect(() => {
     getUserCart(user.token)
       .then((res) => {
@@ -168,6 +171,7 @@ const Checkout = ({ history }) => {
         );
       })
       .catch((err) => toast.error(`${err} happened while emptying cart`));
+    history.push("/user/history");
   };
   const oldAddress = () => {
     if (addressAvailable) {
@@ -192,6 +196,40 @@ const Checkout = ({ history }) => {
       );
     }
     return <></>;
+  };
+  const createCashOrderFunc = (e) => {
+    e.preventDefault();
+    createCashOrder(user.token, cashOnDelivery, coupon)
+      .then((res) => {
+        if (res.data.ok) {
+          toast.success(
+            "Order successfully placed. Go to user history page to confirm status"
+          );
+          dispatch({
+            type: "COUPON_APPLIED",
+            payload: false,
+          });
+          dispatch({
+            type: "CASH_ON_DELIVERY",
+            payload: false,
+          });
+          dispatch({
+            type: "ADD_TO_CART",
+            payload: [],
+          });
+          emptyUserCart(user.token)
+            .then((res) => {
+              toast.info(
+                "Cart is empty. To continue shopping click on Home icon or Shop in the navbar"
+              );
+            })
+            .catch((err) => toast.error(`${err} happened while emptying cart`));
+          setTimeout(() => {
+            history.push("/user/history");
+          }, 1000);
+        }
+      })
+      .catch((err) => console.log(`${err} happened while creating cash order`));
   };
   const showAddressField = (
     <Paper className={classes.paperClass}>
@@ -333,17 +371,31 @@ const Checkout = ({ history }) => {
         <Grid container justify="center">
           <div className="col-md-6">
             <Grid container justify="center">
-              <Button
-                color="primary"
-                disabled={
-                  !addressAvailable || !products || products.length === 0
-                }
-                variant="outlined"
-                className="m-4"
-                onClick={() => history.push("/payment")}
-              >
-                Place Order
-              </Button>
+              {cashOnDelivery ? (
+                <Button
+                  color="primary"
+                  disabled={
+                    !addressAvailable || !products || products.length === 0
+                  }
+                  variant="outlined"
+                  className="m-4"
+                  onClick={createCashOrderFunc}
+                >
+                  Place Order(COD)
+                </Button>
+              ) : (
+                <Button
+                  color="primary"
+                  disabled={
+                    !addressAvailable || !products || products.length === 0
+                  }
+                  variant="outlined"
+                  className="m-4"
+                  onClick={() => history.push("/payment")}
+                >
+                  Place Order
+                </Button>
+              )}
             </Grid>
           </div>
           <div className="col-md-6">

@@ -16,6 +16,7 @@ const {
   addToWishlist,
   getWishlist,
   removeFromWishlist,
+  createCashOrder,
 } = require("../controllers/user");
 router.post("/user/cart", authenticationCheck, userCart);
 router.get("/user/cart", authenticationCheck, getUserCart);
@@ -34,4 +35,5 @@ router.put(
   authenticationCheck,
   removeFromWishlist
 );
+router.post("/user/cash-order", authenticationCheck, createCashOrder);
 module.exports = router;

@@ -6,11 +6,9 @@ import {
   Divider,
   SwipeableDrawer,
   Typography,
-  //IconButton,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import defaultLaptop from "../../assets/defaultLaptop.jpg";
-//import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import ModalImage from "react-modal-image";
 const drawerWidth = 360;
 const useStyles = makeStyles((theme) => ({
@@ -48,26 +46,6 @@ export default function WishlistSideDrawer() {
     });
   };
   const history = useHistory();
-  // const removeProduct = (e, product) => {
-  //   e.preventDefault();
-  //   let wishlist = [];
-
-  //   if (typeof window !== "undefined") {
-  //     if (localStorage.getItem("wishlist")) {
-  //       wishlist = JSON.parse(localStorage.getItem("wishlist"));
-  //     }
-
-  //     wishlist.map(
-  //       (prod, i) => prod._id === product._id && wishlist.splice(i, 1)
-  //     );
-
-  //     localStorage.setItem("wishlist", JSON.stringify(wishlist));
-  //     dispatch({
-  //       type: "ADD_TO_WISHLIST",
-  //       payload: wishlist,
-  //     });
-  //   }
-  // };
   const redirectToWishlist = (e) => {
     e.preventDefault();
     dispatch({
@@ -127,14 +105,7 @@ export default function WishlistSideDrawer() {
               justifyContent: "center",
               display: "flex",
             }}
-          >
-            {/* <IconButton
-              className="text-danger"
-              onClick={(e) => removeProduct(e, p)}
-            >
-              <DeleteOutlineOutlinedIcon />
-            </IconButton> */}
-          </div>
+          ></div>
         </div>
       ))}
       <Button

@@ -2,7 +2,14 @@ import React from "react";
 import CheckCircleOutlinedIcon from "@material-ui/icons/CheckCircleOutlined";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import ShowPaymentInformation from "../cards/ShowPaymentInformation";
-import { amber, red, blue, green, orange } from "@material-ui/core/colors";
+import {
+  amber,
+  red,
+  blue,
+  green,
+  orange,
+  lightGreen,
+} from "@material-ui/core/colors";
 import {
   FormControl,
   Typography,
@@ -13,13 +20,21 @@ import {
 } from "@material-ui/core";
 const possibleStatus = [
   "Not Processed",
+  "Cash On Delivery",
   "Processing",
   "Dispatched",
   "Cancelled",
   "Delivered",
 ];
 function bgColor(orderStatus) {
-  const colors = [blue[400], amber[400], orange[400], red[400], green[400]];
+  const colors = [
+    blue[400],
+    lightGreen[600],
+    amber[400],
+    orange[400],
+    red[400],
+    green[400],
+  ];
   for (let i = 0; i < possibleStatus.length; i++) {
     if (possibleStatus[i] === orderStatus) {
       return colors[i];

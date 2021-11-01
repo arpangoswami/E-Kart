@@ -45,7 +45,7 @@ const BestSellers = ({ loading, setLoading }) => {
         Best Sellers
       </Typography>
 
-      <Grid container justify="center">
+      <Grid container justifyContent="center">
         {loading ? (
           <LoadingCard quantity={3} />
         ) : (
@@ -56,7 +56,7 @@ const BestSellers = ({ loading, setLoading }) => {
           ))
         )}
       </Grid>
-      <Grid container justify="center">
+      <Grid container justifyContent="center">
         <Pagination
           onChange={handleChange}
           color="primary"

@@ -32,6 +32,7 @@ import { useSelector, useDispatch } from "react-redux";
 import _ from "lodash";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import { removeFromWishlist, addToWishlist } from "../../functions/cart.js";
+import { toast } from "react-toastify";
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -46,7 +47,10 @@ const useStyles = makeStyles((theme) => ({
     height: 560,
     alignContent: "center",
     flexDirection: "column",
-    margin: theme.spacing(5),
+    marginTop: theme.spacing(5),
+    marginLeft: theme.spacing(5),
+    marginRight: theme.spacing(5),
+    marginBottom: theme.spacing(2),
   },
   mediaClass: {
     width: "100%",
@@ -57,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#FBF3E4",
   },
 }));
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, showWishlistBtn = true }) => {
   const classes = useStyles();
   const { title, description, images, slug } = product;
   const [fav, setFav] = useState(false);
@@ -84,6 +88,7 @@ const ProductCard = ({ product }) => {
     }
   }, [cart, product]);
   const deleteFromWishlist = () => {
+    toast.info(`${product.title} removed from wishlist`);
     removeFromWishlist(product._id, user.token)
       .then((res) => {
         if (res.data.ok) {
@@ -98,7 +103,7 @@ const ProductCard = ({ product }) => {
               (prod, i) => prod._id === product._id && wishlistTemp.splice(i, 1)
             );
 
-            localStorage.setItem("wishlist", JSON.stringify(cart));
+            localStorage.setItem("wishlist", JSON.stringify(wishlistTemp));
             dispatch({
               type: "ADD_TO_WISHLIST",
               payload: wishlistTemp,
@@ -111,6 +116,7 @@ const ProductCard = ({ product }) => {
       );
   };
   const addToWishlistFunc = () => {
+    //toast.success("Added to wishlist");
     addToWishlist(product._id, user.token)
       .then((res) => {
         if (res.data.ok) {
@@ -193,7 +199,7 @@ const ProductCard = ({ product }) => {
           </Avatar>
         }
         action={
-          user ? (
+          user && showWishlistBtn ? (
             <IconButton
               aria-label="favourite"
               onClick={(event) => {

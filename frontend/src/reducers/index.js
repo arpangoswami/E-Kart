@@ -6,6 +6,7 @@ import { cartDrawerReducer } from "./cartDrawerReducer";
 import { couponReducer } from "./couponReducer";
 import { wishlistDrawerReducer } from "./wishlistDrawerReducer";
 import { wishlistReducer } from "./wishlistReducer";
+import { CODreducer } from "./CODreducer";
 const rootReducer = combineReducers({
   user: userReducer,
   search: searchReducer,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   coupon: couponReducer,
   wishlistDrawer: wishlistDrawerReducer,
   wishlist: wishlistReducer,
+  cashOnDelivery: CODreducer,
 });
 
 export default rootReducer;

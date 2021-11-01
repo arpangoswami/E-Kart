@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import Jumbotron from "../components/cards/Jumbotron";
-import LatestProducts from "./home/LatestProducts";
-import BestSellers from "./home/BestSellers";
+import React, { useState, lazy } from "react";
 import { Typography } from "@material-ui/core";
-import CategoryList from "../components/category/CategoryList";
-import SubCategoryList from "../components/subcategory/SubCategoryList";
+const Jumbotron = lazy(() => import("../components/cards/Jumbotron"));
+const LatestProducts = lazy(() => import("./home/LatestProducts"));
+const BestSellers = lazy(() => import("./home/BestSellers"));
+const CategoryList = lazy(() => import("../components/category/CategoryList"));
+const SubCategoryList = lazy(() =>
+  import("../components/subcategory/SubCategoryList")
+);
 const Home = () => {
   const [loading, setLoading] = useState(true);
   return (

@@ -113,8 +113,8 @@ export default function CartSideDrawer() {
         Cart | {cart.length} items
       </Typography>
       <Divider />
-      {cart.map((p) => (
-        <div key={p._id}>
+      {cart.map((p, i) => (
+        <div key={i}>
           <Typography variant="body1" align="center" className="text-center">
             {truncate(p.title, 60)} X {p.count}
           </Typography>

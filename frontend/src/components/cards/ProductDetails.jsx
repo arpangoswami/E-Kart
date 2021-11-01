@@ -20,8 +20,10 @@ import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import ProductListItems from "./ProductListItems";
 import defaultLaptop from "../../assets/defaultLaptop.jpg";
 import { showAverage } from "../../functions/rating.js";
+import { addToWishlist } from "../../functions/cart";
 import StarRatings from "react-star-ratings";
 import RatingModal from "../modal/RatingModal";
+import { toast } from "react-toastify";
 import { Tooltip } from "antd";
 import _ from "lodash";
 import { useSelector, useDispatch } from "react-redux";
@@ -60,7 +62,7 @@ const ProductDetails = ({ product, onStarClick, stars, onOkFunction }) => {
   const { title, images, description, _id } = product;
   const [tabValue, setTabValue] = useState("1");
   const dispatch = useDispatch();
-  const { cart } = useSelector((state) => ({ ...state }));
+  const { user, cart } = useSelector((state) => ({ ...state }));
   const [tooltipText, setTooltipText] = useState("Add to Cart");
   useEffect(() => {
     for (let i = 0; i < cart.length; i++) {
@@ -71,6 +73,36 @@ const ProductDetails = ({ product, onStarClick, stars, onOkFunction }) => {
   }, [cart, product]);
   const handleTabChange = (event, value) => {
     setTabValue(value);
+  };
+  const addToWishlistFunc = (e) => {
+    e.preventDefault();
+    toast.success("Added to wishlist");
+    addToWishlist(product._id, user.token)
+      .then((res) => {
+        if (res.data.ok) {
+          let wishlistTemp = [];
+          if (typeof window !== "undefined") {
+            if (localStorage.getItem("wishlist")) {
+              wishlistTemp = JSON.parse(localStorage.getItem("wishlist"));
+            }
+
+            // push new product to wishlsit
+            wishlistTemp.push(product);
+            let unique = _.uniqWith(wishlistTemp, _.isEqual);
+            // save to local storage
+            localStorage.setItem("wishlist", JSON.stringify(unique));
+            dispatch({
+              type: "ADD_TO_WISHLIST",
+              payload: wishlistTemp,
+            });
+            dispatch({
+              type: "SET_VISIBLE_WISHLIST",
+              payload: true,
+            });
+          }
+        }
+      })
+      .catch((err) => console.log(`${err} happened while adding to wishlist`));
   };
   const handleAddToCart = (e) => {
     e.preventDefault();
@@ -144,6 +176,7 @@ const ProductDetails = ({ product, onStarClick, stars, onOkFunction }) => {
                 className="col-md-4"
                 style={{ color: pink[300] }}
                 endIcon={<FavoriteBorderIcon />}
+                onClick={addToWishlistFunc}
               >
                 Wishlist
               </Button>

@@ -1,5 +1,5 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { lazy } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Grid,
   Typography,
@@ -12,14 +12,16 @@ import {
   TableRow,
   Button,
 } from "@material-ui/core";
-import ProductRowInCart from "../components/cards/ProductRowInCart";
 import { Link } from "react-router-dom";
-import { green } from "@material-ui/core/colors";
+import { orange, green } from "@material-ui/core/colors";
 import { userCart } from "../functions/cart";
 import { toast } from "react-toastify";
+const ProductRowInCart = lazy(() =>
+  import("../components/cards/ProductRowInCart")
+);
 const Cart = ({ history }) => {
   const { user, cart } = useSelector((state) => ({ ...state }));
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const showCart = () => {
     return (
       <TableContainer component={Paper}>
@@ -51,8 +53,14 @@ const Cart = ({ history }) => {
       return currentValue + nextValue.count * nextValue.price;
     }, 0);
   };
-  const saveOrderToDB = (e) => {
+  const saveOrderToDB = (e, cod = false) => {
     e.preventDefault();
+    if (cod) {
+      dispatch({
+        type: "CASH_ON_DELIVERY",
+        payload: true,
+      });
+    }
     //console.log("Cart: ", JSON.stringify(cart, null, 4));
     userCart(cart, user.token)
       .then((res) => {
@@ -138,18 +146,34 @@ const Cart = ({ history }) => {
                 </TableCell>
               </TableRow>
             </Table>
-            <Grid container justify="center">
-              {user ? (
-                <Button
-                  onClick={saveOrderToDB}
-                  className="btn btn-sm mb-3 mt-3"
-                  disabled={cart.length === 0 ? true : false}
-                  style={{ color: green[400] }}
-                  variant="outlined"
-                >
-                  Proceed to Checkout
-                </Button>
-              ) : (
+
+            {user ? (
+              <>
+                <Grid container justify="center">
+                  <Button
+                    onClick={(e) => saveOrderToDB(e)}
+                    className="btn btn-sm mb-3 mt-3"
+                    disabled={cart.length === 0 ? true : false}
+                    style={{ color: green[400] }}
+                    variant="outlined"
+                  >
+                    Proceed to Checkout
+                  </Button>
+                </Grid>
+                <Grid container justify="center">
+                  <Button
+                    onClick={(e) => saveOrderToDB(e, true)}
+                    className="btn btn-sm mb-3 mt-3"
+                    disabled={cart.length === 0 ? true : false}
+                    style={{ color: orange[400] }}
+                    variant="outlined"
+                  >
+                    Cash On Delivery
+                  </Button>
+                </Grid>
+              </>
+            ) : (
+              <Grid container justify="center">
                 <Button
                   className="btn btn-sm text-info mb-3 mt-3"
                   variant="outlined"
@@ -158,8 +182,8 @@ const Cart = ({ history }) => {
                     Login to Checkout
                   </Link>
                 </Button>
-              )}
-            </Grid>
+              </Grid>
+            )}
           </TableContainer>
         </div>
       </div>

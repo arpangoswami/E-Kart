@@ -14,6 +14,6 @@ exports.orderStatus = async (req, res) => {
     { orderStatus },
     { new: true }
   );
-  console.log("UPDATED: ", updated);
+  //console.log("UPDATED: ", updated);
   res.json(updated);
 };

@@ -23,7 +23,7 @@ const LatestProducts = ({ loading, setLoading }) => {
         setLoading(false);
         toast.error(`${err} happened while fetching products`);
       });
-  }, [page, setLoading, loading]);
+  }, [page, setLoading]);
   useEffect(() => {
     loadLatest();
   }, [loadLatest, setLoading, loading]);
@@ -45,7 +45,7 @@ const LatestProducts = ({ loading, setLoading }) => {
         Latest Products
       </Typography>
 
-      <Grid container justify="center">
+      <Grid container justifyContent="center">
         {loading ? (
           <LoadingCard quantity={3} />
         ) : (
@@ -56,7 +56,7 @@ const LatestProducts = ({ loading, setLoading }) => {
           ))
         )}
       </Grid>
-      <Grid container justify="center">
+      <Grid container justifyContent="center">
         <Pagination
           onChange={handleChange}
           color="primary"
