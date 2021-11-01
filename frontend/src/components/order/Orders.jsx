@@ -4,9 +4,7 @@ import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import ShowPaymentInformation from "../cards/ShowPaymentInformation";
 import { amber, red, blue, green, orange } from "@material-ui/core/colors";
 import {
-  Select,
   FormControl,
-  InputLabel,
   Typography,
   MenuItem,
   Divider,

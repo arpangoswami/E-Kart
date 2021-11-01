@@ -31,12 +31,14 @@ import CategoryWiseProducts from "./screens/category/CategoryWiseProducts";
 import SubCategoryWiseProducts from "./screens/subcategory/SubCategoryWiseProducts";
 import Checkout from "./screens/Checkout";
 import Payment from "./screens/Payment";
+import { getWishlist } from "./functions/cart";
 import { ThemeProvider, createTheme } from "@material-ui/core";
 import { deepPurple, indigo } from "@material-ui/core/colors";
 import { auth } from "./firebase";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { currentUser } from "./functions/auth";
 import CartSideDrawer from "./components/sideDrawer/CartSideDrawer";
+import WishlistSideDrawer from "./components/sideDrawer/WishlistSideDrawer";
 const theme = createTheme({
   palette: {
     primary: deepPurple,
@@ -52,7 +54,7 @@ const theme = createTheme({
 });
 function App() {
   const dispatcher = useDispatch();
-
+  const { user } = useSelector((state) => ({ ...state }));
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
@@ -77,11 +79,25 @@ function App() {
     //cleanup
     return () => unsubscribe();
   }, [dispatcher]);
-
+  useEffect(() => {
+    if (user && user.token) {
+      getWishlist(user.token)
+        .then((res) => {
+          dispatcher({
+            type: "ADD_TO_WISHLIST",
+            payload: res.data.wishlist,
+          });
+        })
+        .catch((err) =>
+          console.log(`${err} happened while fetching user's wishlist`)
+        );
+    }
+  }, [user]);
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <CartSideDrawer />
+        <WishlistSideDrawer />
         <ToastContainer />
         <Layout>
           <Switch>

@@ -16,6 +16,7 @@ const {
   addToWishlist,
   getWishlist,
   removeFromWishlist,
+  presentInWishlist,
 } = require("../controllers/user");
 router.post("/user/cart", authenticationCheck, userCart);
 router.get("/user/cart", authenticationCheck, getUserCart);
@@ -30,6 +31,11 @@ router.get("/user/orders", authenticationCheck, orderByUser);
 router.post("/user/wishlist", authenticationCheck, addToWishlist);
 router.get("/user/wishlist", authenticationCheck, getWishlist);
 router.put(
+  "/user/wishlist/:productId",
+  authenticationCheck,
+  removeFromWishlist
+);
+router.get(
   "/user/wishlist/:productId",
   authenticationCheck,
   removeFromWishlist

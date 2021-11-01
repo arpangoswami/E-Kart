@@ -131,6 +131,17 @@ exports.addToWishlist = async (req, res) => {
   );
   res.json({ ok: true });
 };
+exports.presentInWishlist = async (req, res) => {
+  const { productId } = req.params;
+  const isPresent = await User.findOne({
+    email: req.user.email,
+    wishlist: productId,
+  }).exec();
+  if (isPresent) {
+    return res.json({ isPresent: true });
+  }
+  return res.json({ isPresent: false });
+};
 
 exports.getWishlist = async (req, res) => {
   const wishlist = await User.findOne({ email: req.user.email })

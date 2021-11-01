@@ -84,3 +84,10 @@ export const removeFromWishlist = async (productId, authToken) =>
       },
     }
   );
+
+export const presentInWishlist = async (productId, authToken) =>
+  axios.get(`${process.env.REACT_APP_API}/user/wishlist/${productId}`, {
+    headers: {
+      authToken,
+    },
+  });

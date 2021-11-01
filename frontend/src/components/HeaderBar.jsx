@@ -31,7 +31,7 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 //user drawer
 import HistoryIcon from "@material-ui/icons/History";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
-// import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import CreateNewFolderIcon from "@material-ui/icons/CreateNewFolder";
 import CreateIcon from "@material-ui/icons/Create";
@@ -165,7 +165,7 @@ export default function HeaderBar({ window }) {
   //const [wishlistCount, setWishlistCount] = useState(5);
 
   const dispatcher = useDispatch();
-  const { user, cart } = useSelector((state) => {
+  const { user, cart, wishlist } = useSelector((state) => {
     return { ...state };
   });
 
@@ -200,6 +200,10 @@ export default function HeaderBar({ window }) {
   const redirectCart = (event) => {
     event.preventDefault();
     history.push("/cart");
+  };
+  const redirectWishlist = (event) => {
+    event.preventDefault();
+    history.push("/wishlist");
   };
   const redirectShop = (event) => {
     event.preventDefault();
@@ -246,11 +250,11 @@ export default function HeaderBar({ window }) {
       icon: <LockOpenIcon color="secondary" />,
       path: "/user/update-password",
     },
-    // {
-    //   text: "Wishlist",
-    //   icon: <FavoriteBorderIcon color="secondary" />,
-    //   path: "/user/wishlist",
-    // },
+    {
+      text: "Wishlist",
+      icon: <FavoriteBorderIcon color="secondary" />,
+      path: "/wishlist",
+    },
   ];
   const userDrawer = (
     <div>
@@ -412,6 +416,14 @@ export default function HeaderBar({ window }) {
         </IconButton>
         <p>Wishlist</p>
       </MenuItem> */}
+      <MenuItem onClick={redirectWishlist}>
+        <IconButton aria-label="show-cart" color="inherit">
+          <Badge badgeContent={wishlist.length} color="secondary">
+            <FavoriteBorderIcon />
+          </Badge>
+        </IconButton>
+        <p>Wishlist</p>
+      </MenuItem>
       <MenuItem onClick={redirectCart}>
         <IconButton aria-label="show-cart" color="inherit">
           <Badge badgeContent={cart.length} color="secondary">
@@ -507,12 +519,13 @@ export default function HeaderBar({ window }) {
           <SearchBar />
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            {/* <IconButton
+            <IconButton
               aria-label="show-wishlist"
               className={classes.lighterAppBarHover}
               color="inherit"
+              onClick={redirectWishlist}
             >
-              <Badge badgeContent={wishlistCount} color="secondary">
+              <Badge badgeContent={wishlist.length} color="secondary">
                 <Typography
                   color="secondary"
                   variant="button"
@@ -520,9 +533,9 @@ export default function HeaderBar({ window }) {
                 >
                   Wishlist
                 </Typography>
-                <FavoriteIcon />
+                <FavoriteBorderIcon />
               </Badge>
-            </IconButton> */}
+            </IconButton>
             <IconButton
               aria-label="show-cart"
               className={classes.lighterAppBarHover}

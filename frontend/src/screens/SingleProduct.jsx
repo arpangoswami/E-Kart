@@ -17,7 +17,6 @@ const SingleProduct = ({ match }) => {
 
   const [stars, setStars] = useState(0);
   const { user } = useSelector((state) => ({ ...state }));
-  const handleAddtoCart = () => {};
   const onOkFunction = () => {
     updateProductReview(product._id, stars, user.token)
       .then((res) => {
@@ -87,11 +86,7 @@ const SingleProduct = ({ match }) => {
             ) : (
               related.map((p) => (
                 <div key={p._id} className="row">
-                  <ProductCard
-                    product={p}
-                    key={p._id}
-                    handleAddtoCart={handleAddtoCart}
-                  />
+                  <ProductCard product={p} key={p._id} />
                 </div>
               ))
             )}

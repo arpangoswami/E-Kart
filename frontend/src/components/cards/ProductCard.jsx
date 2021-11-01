@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Card,
   makeStyles,
@@ -11,6 +11,7 @@ import {
   Avatar,
   Grid,
   Button,
+  IconButton,
 } from "@material-ui/core";
 import Carousel from "react-material-ui-carousel";
 import VisibilityIcon from "@material-ui/icons/Visibility";
@@ -29,6 +30,8 @@ import { Link } from "react-router-dom";
 import { showAverage } from "../../functions/rating.js";
 import { useSelector, useDispatch } from "react-redux";
 import _ from "lodash";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import { removeFromWishlist, addToWishlist } from "../../functions/cart.js";
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -50,14 +53,29 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },
+  favButtonIcon: {
+    backgroundColor: "#FBF3E4",
+  },
 }));
 const ProductCard = ({ product }) => {
   const classes = useStyles();
   const { title, description, images, slug } = product;
-
+  const [fav, setFav] = useState(false);
   const dispatch = useDispatch();
-  const { cart } = useSelector((state) => ({ ...state }));
+  const { cart, user, wishlist } = useSelector((state) => ({ ...state }));
   const [tooltipText, setTooltipText] = useState("Add to Cart");
+  const presentInWishlistLocal = useCallback(() => {
+    for (let i = 0; i < wishlist.length; i++) {
+      if (wishlist[i]._id === product._id) {
+        setFav(true);
+        return true;
+      }
+    }
+    return false;
+  }, [product._id, wishlist]);
+  useEffect(() => {
+    presentInWishlistLocal();
+  }, [presentInWishlistLocal, wishlist, product]);
   useEffect(() => {
     for (let i = 0; i < cart.length; i++) {
       if (cart[i]._id === product._id) {
@@ -65,7 +83,62 @@ const ProductCard = ({ product }) => {
       }
     }
   }, [cart, product]);
+  const deleteFromWishlist = () => {
+    removeFromWishlist(product._id, user.token)
+      .then((res) => {
+        if (res.data.ok) {
+          setFav(false);
+          let wishlistTemp = [];
+          if (typeof window !== "undefined") {
+            if (localStorage.getItem("wishlist")) {
+              wishlistTemp = JSON.parse(localStorage.getItem("wishlist"));
+            }
 
+            wishlistTemp.map(
+              (prod, i) => prod._id === product._id && wishlistTemp.splice(i, 1)
+            );
+
+            localStorage.setItem("wishlist", JSON.stringify(cart));
+            dispatch({
+              type: "ADD_TO_WISHLIST",
+              payload: wishlistTemp,
+            });
+          }
+        }
+      })
+      .catch((err) =>
+        console.log(`${err} happened while removing from wishlist`)
+      );
+  };
+  const addToWishlistFunc = () => {
+    addToWishlist(product._id, user.token)
+      .then((res) => {
+        if (res.data.ok) {
+          setFav(true);
+          let wishlistTemp = [];
+          if (typeof window !== "undefined") {
+            if (localStorage.getItem("wishlist")) {
+              wishlistTemp = JSON.parse(localStorage.getItem("wishlist"));
+            }
+
+            // push new product to wishlsit
+            wishlistTemp.push(product);
+            let unique = _.uniqWith(wishlistTemp, _.isEqual);
+            // save to local storage
+            localStorage.setItem("wishlist", JSON.stringify(unique));
+            dispatch({
+              type: "ADD_TO_WISHLIST",
+              payload: wishlistTemp,
+            });
+            dispatch({
+              type: "SET_VISIBLE_WISHLIST",
+              payload: true,
+            });
+          }
+        }
+      })
+      .catch((err) => console.log(`${err} happened while adding to wishlist`));
+  };
   //checkIfExists();
   const colors = [
     red[200],
@@ -118,6 +191,26 @@ const ProductCard = ({ product }) => {
           >
             {title[0]}
           </Avatar>
+        }
+        action={
+          user ? (
+            <IconButton
+              aria-label="favourite"
+              onClick={(event) => {
+                event.preventDefault();
+                if (fav) {
+                  deleteFromWishlist();
+                } else {
+                  addToWishlistFunc();
+                }
+              }}
+              className={classes.favButtonIcon}
+            >
+              <FavoriteIcon style={{ fill: fav ? red[500] : "" }} />
+            </IconButton>
+          ) : (
+            <></>
+          )
         }
         title={truncate(title, 20)}
         // subheader={truncate(title, 55)}

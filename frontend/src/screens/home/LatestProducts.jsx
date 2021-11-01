@@ -23,10 +23,10 @@ const LatestProducts = ({ loading, setLoading }) => {
         setLoading(false);
         toast.error(`${err} happened while fetching products`);
       });
-  }, [page, setLoading]);
+  }, [page, setLoading, loading]);
   useEffect(() => {
     loadLatest();
-  }, [loadLatest]);
+  }, [loadLatest, setLoading, loading]);
   useEffect(() => {
     getTotalProductCount().then((res) => setProductsCount(res.data.total));
   }, []);
