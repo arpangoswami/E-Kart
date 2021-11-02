@@ -5,9 +5,6 @@ import LatestProducts from "./home/LatestProducts";
 import BestSellers from "./home/BestSellers";
 import CategoryList from "../components/category/CategoryList";
 import SubCategoryList from "../components/subcategory/SubCategoryList";
-const SubCategoryList = lazy(() =>
-  import("../components/subcategory/SubCategoryList")
-);
 const Home = () => {
   const [loading, setLoading] = useState(true);
   return (
