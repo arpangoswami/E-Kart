@@ -102,6 +102,7 @@ const Shop = () => {
       payload: { text: "" },
     });
     setTimeout(() => {}, 300);
+    fetchProducts({ price });
     setStars("");
     setBrand("");
     setColor("");
