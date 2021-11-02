@@ -22,7 +22,7 @@ exports.createPaymentIntent = async (req, res) => {
   }
   const paymentIntent = await stripe.paymentIntents.create({
     //TODO: hard coded here will change later on
-    amount: finalAmount,
+    amount: Math.max(finalAmount, 100),
     currency: "inr",
   });
 

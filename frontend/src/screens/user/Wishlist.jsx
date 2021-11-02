@@ -34,6 +34,7 @@ const Wishlist = () => {
           if (typeof window !== undefined) {
             localStorage.setItem("wishlist", newWishlist);
           }
+          loadWishListProds();
         }
       })
       .catch((err) =>

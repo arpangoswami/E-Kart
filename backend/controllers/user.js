@@ -166,13 +166,13 @@ exports.createCashOrder = async (req, res) => {
   if (couponApplied && userCart.totalAfterDiscount) {
     finalAmount = Math.ceil(userCart.totalAfterDiscount) * 100;
   } else {
-    finalAmount = userCart.cartTotal * 100;
+    finalAmount = Math.ceil(userCart.cartTotal) * 100;
   }
   let newOrder = await new Order({
     products: userCart.products,
     paymentIntent: {
       id: uniqid(),
-      amount: finalAmount,
+      amount: Math.max(finalAmount, 100),
       currency: "inr",
       status: "Cash On Delivery",
       created: Date.now(),

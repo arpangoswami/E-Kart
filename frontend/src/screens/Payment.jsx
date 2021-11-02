@@ -1,4 +1,4 @@
-import React, { lazy } from "react";
+import React from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import {
@@ -9,8 +9,8 @@ import {
   Divider,
 } from "@material-ui/core";
 import "../stripe.css";
-const payment = lazy(() => import("../assets/payment.svg"));
-const CheckoutForm = lazy(() => import("../components/forms/CheckoutForm"));
+import payment from "../assets/payment.svg";
+import CheckoutForm from "../components/forms/CheckoutForm";
 const useStyles = makeStyles((theme) => ({
   paperClass: {
     maxWidth: 800,

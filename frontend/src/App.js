@@ -66,7 +66,6 @@ const CartSideDrawer = lazy(() =>
 const WishlistSideDrawer = lazy(() =>
   import("./components/sideDrawer/WishlistSideDrawer")
 );
-
 const theme = createTheme({
   palette: {
     primary: deepPurple,

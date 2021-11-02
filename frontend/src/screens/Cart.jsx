@@ -1,4 +1,4 @@
-import React, { lazy } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Grid,
@@ -16,9 +16,7 @@ import { Link } from "react-router-dom";
 import { orange, green } from "@material-ui/core/colors";
 import { userCart } from "../functions/cart";
 import { toast } from "react-toastify";
-const ProductRowInCart = lazy(() =>
-  import("../components/cards/ProductRowInCart")
-);
+import ProductRowInCart from "../components/cards/ProductRowInCart";
 const Cart = ({ history }) => {
   const { user, cart } = useSelector((state) => ({ ...state }));
   const dispatch = useDispatch();
