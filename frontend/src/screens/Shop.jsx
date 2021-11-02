@@ -23,11 +23,9 @@ const Shop = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [price, setPrice] = useState([0, 99999]);
-  const [ok, setOk] = useState(false);
   const [categories, setCategories] = useState([]);
   const [categoryIDs, setCategoryIDs] = useState([]);
   const [stars, setStars] = useState("");
-  const [subCat, setSubs] = useState("");
   const [subCategories, setSubCategories] = useState([]);
   const colors = ["Black", "Brown", "Silver", "White", "Blue"];
   const [color, setColor] = useState("");
@@ -66,7 +64,11 @@ const Shop = () => {
   }, []);
   const fetchProducts = (arg) => {
     fetchProductsByFilter(arg)
-      .then((res) => setProducts(res.data))
+      .then((res) => {
+        console.log(res.data);
+        console.log(arg);
+        setProducts(res.data);
+      })
       .catch((err) => console.log(`${err} happened while fetching products`));
   };
   useEffect(() => {
@@ -81,13 +83,6 @@ const Shop = () => {
     }, 600);
     return () => clearTimeout(delayed);
   }, [text]);
-  //3. load products based on price range
-  useEffect(() => {
-    const delayed = setTimeout(() => {
-      fetchProducts({ price });
-    }, 300);
-    return () => clearTimeout(delayed);
-  }, [ok, price]);
   const loadProducts = () => {
     setLoading(true);
     getProductsByCount(12)
@@ -106,27 +101,14 @@ const Shop = () => {
       type: "SEARCH_QUERY",
       payload: { text: "" },
     });
-    setTimeout(() => {
-      setOk(!ok);
-    }, 300);
+    setTimeout(() => {}, 300);
     setStars("");
-    setSubs("");
     setBrand("");
     setColor("");
     setShipping("");
     setCategoryIDs([]);
   };
   const handleCheckCategory = (e) => {
-    dispatcher({
-      type: "SEARCH_QUERY",
-      payload: { text: "" },
-    });
-    setPrice([0, 99999]);
-    setCategoryIDs([]);
-    setSubs("");
-    setBrand("");
-    setColor("");
-    setShipping("");
     let alreadyChecked = [...categoryIDs];
     let justChecked = e.target.value;
     let present = alreadyChecked.indexOf(justChecked);
@@ -141,6 +123,15 @@ const Shop = () => {
     } else {
       loadProducts();
     }
+    dispatcher({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setPrice([0, 99999]);
+    setBrand("");
+    setColor("");
+    setShipping("");
+
     setStars("");
   };
   const showCategories = categories.map((c) => (
@@ -164,7 +155,6 @@ const Shop = () => {
     });
     setPrice([0, 99999]);
     setCategoryIDs([]);
-    setSubs("");
     setBrand("");
     setColor("");
     setShipping("");
@@ -180,7 +170,7 @@ const Shop = () => {
     }
   };
 
-  const handleSub = (sub) => {
+  const handleSub = (subCat) => {
     dispatcher({
       type: "SEARCH_QUERY",
       payload: { text: "" },
@@ -213,7 +203,6 @@ const Shop = () => {
     </div>
   );
   const handleBrand = (e) => {
-    setSubs("");
     dispatcher({
       type: "SEARCH_QUERY",
       payload: { text: "" },
@@ -241,7 +230,6 @@ const Shop = () => {
     </>
   ));
   const handleColor = (e) => {
-    setSubs("");
     dispatcher({
       type: "SEARCH_QUERY",
       payload: { text: "" },
@@ -266,7 +254,6 @@ const Shop = () => {
     </Radio>
   ));
   const handleShippingchange = (e) => {
-    setSubs("");
     dispatcher({
       type: "SEARCH_QUERY",
       payload: { text: "" },

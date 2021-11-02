@@ -1,6 +1,6 @@
 import React from "react";
 import { red, green } from "@material-ui/core/colors";
-const ShowPaymentInformation = ({ order, showStatus = true }) => (
+const ShowPaymentInformation = ({ order, showStatus = true, cod = false }) => (
   <div>
     <p>
       <span className="m-1">Order Id: {order.paymentIntent.id}</span>

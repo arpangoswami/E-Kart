@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { currentUser } from "./functions/auth";
 import { LoadingOutlined } from "@ant-design/icons";
 import "react-toastify/dist/ReactToastify.css";
+import Layout from "./components/Layout";
 const Login = lazy(() => import("./screens/authentication/Login"));
 const Signup = lazy(() => import("./screens/authentication/Signup"));
 const Home = lazy(() => import("./screens/Home"));
@@ -21,7 +22,6 @@ const ForgotPassword = lazy(() =>
   import("./screens/authentication/ForgotPassword")
 );
 const UserHistory = lazy(() => import("./screens/user/UserHistory"));
-const Layout = lazy(() => import("./components/Layout"));
 const UserRoutes = lazy(() => import("./components/routes/UserRoutes"));
 const LoggedOutRoute = lazy(() => import("./components/routes/LoggedOutRoute"));
 const AdminRoutes = lazy(() => import("./components/routes/AdminRoutes"));
@@ -66,6 +66,7 @@ const CartSideDrawer = lazy(() =>
 const WishlistSideDrawer = lazy(() =>
   import("./components/sideDrawer/WishlistSideDrawer")
 );
+
 const theme = createTheme({
   palette: {
     primary: deepPurple,
