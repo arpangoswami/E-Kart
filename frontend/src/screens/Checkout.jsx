@@ -116,6 +116,7 @@ const Checkout = ({ history }) => {
       .then((res) => {
         if (res.data.ok) {
           toast.success("New address saved");
+          setAddressAvailable(true);
         }
       })
       .catch((err) => toast.error(`${err} saving address to the database`));
