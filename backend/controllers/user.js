@@ -168,6 +168,7 @@ exports.createCashOrder = async (req, res) => {
   } else {
     finalAmount = Math.ceil(userCart.cartTotal) * 100;
   }
+  let todayDate = new Date();
   let newOrder = await new Order({
     products: userCart.products,
     paymentIntent: {
@@ -175,7 +176,7 @@ exports.createCashOrder = async (req, res) => {
       amount: Math.max(finalAmount, 100),
       currency: "inr",
       status: "Cash On Delivery",
-      created: Date.now(),
+      created: todayDate,
       payment_method_types: ["cash"],
     },
     orderedBy: user._id,

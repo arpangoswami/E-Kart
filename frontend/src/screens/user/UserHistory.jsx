@@ -120,7 +120,7 @@ const UserHistory = () => {
     </table>
   );
   const showOrders = () =>
-    orders.map((order, i) => (
+    orders.reverse().map((order, i) => (
       <div className="card m-5 p-3 text-center" key={i}>
         <ShowPaymentInformation order={order} />
         {showIndividualOrder(order)}
