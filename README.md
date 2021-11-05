@@ -1,7 +1,8 @@
 # E-Kart
 Full Fledged E commerce site made using MERN stack with React-redux for state management. Uses Material UI for design
 [Link to the site hosted on heroku](https://arpan-ecommerce-client.herokuapp.com/)
-##To recreate the project
+
+## To recreate the project
 1) Clone the project and run npm install on both backend and frontend folders.
 2) Create a project in firebase for authentication. Make a folder inside the backend folder. Call it config and store the firebaseServiceAccountKey.json inside it. Add REACT_APP_FIREBASE_API_KEY, REACT_APP_FIREBASE_AUTH_DOMAIN, REACT_APP_FIREBASE_PROJECT_ID, REACT_APP_FIREBASE_STORAGE_BUCKET, REACT_APP_FIREBASE_MESSAGING_SENDER_ID and REACT_APP_FIREBASE_APP_ID to the frontend .env file.
 3) Create an account in Cloudinary service and from the dashboard get the credentials of CLOUDINARY_NAME,CLOUDINARY_API_KEY and CLOUDINARY_SECRET. (Write these in the .env file of the backend repo)
@@ -9,7 +10,7 @@ Full Fledged E commerce site made using MERN stack with React-redux for state ma
 5) Create an account in Stripe for payment integration. Go to the dashboard page add STRIPE_SECRET_KEY (in the .env of the backend repo) and the publishable key as REACT_APP_STRIPE_PUBLISHABLE_KEY (in the .env file of the frontend repo).
 6) Add REACT_APP_SIGNUP_REDIRECT and REACT_APP_FORGOT_PASSWORD_REDIRECT as the url's you would like the customer to be redirected to after signing up and after submitting a change password request after Password redirect.
 
-##Features of this site:- 
+## Features of this site:- 
 1) Authentication using firebase. Allows us to use google sign in seamlessly.
 2) Firebase allows us to use email verification while signing up and while using the forgot password option.
 3) Add to wishlist with the user's wishlist saved in the database.
@@ -25,20 +26,53 @@ Full Fledged E commerce site made using MERN stack with React-redux for state ma
 13) Rating system so that the users can rate the products.
 14) Admin can change status of orders from their dashboard.
 
-![Landing page](screenshots/home_screen.png)
-![Wishlist_side](screenshots/wishlist_side1.png)
-![Cart_side](screenshots/cart_side.png)
-![Log In](screenshots/sign_in_form_1.png)
-![Search Bar for products](screenshots/search_filter1.png)
-![Search Based on filters](screenshots/search_filter_menu.png)
-![Google Sign In](screenshots/google_sign_in.png)
-![Cart Page](screenshots/cart_screen_1.png)
-![Coupon successfully applied](screenshots/coupon_applied1.png)
-![Checkout page](screenshots/checkout_1.png)
-![PDF Order Invoice](screenshots/order_invoice_pdf_screenshot.png)
-![User Order history](screenshots/user_history.png)
-![Rating system for users](screenshots/rating_1.png)
-![Admin Dashboard](screenshots/admin_dashboard.png)
-![Coupon create](screenshots/coupon_create.png)
-![Drag and drop images while creating product](screenshots/drag_and_drop_images.png)
-![Similar Forms for Category/SubCategory creation](screenshots/similar_forms_category.png)
+## Landing Page
+![Landing page](screenshots/home_screen.PNG)
+
+## Wishlist_side
+![Wishlist_side](screenshots/wishlist_side1.PNG)
+
+## Cart_side
+![Cart_side](screenshots/cart_side.PNG)
+
+## Log In
+![Log In](screenshots/sign_in_form_1.PNG)
+
+## Search Bar for products
+![Search Bar for products](screenshots/search_filter1.PNG)
+
+## Search Based on filters
+![Search Based on filters](screenshots/search_filter_menu.PNG)
+
+## Google Sign In
+![Google Sign In](screenshots/google_sign_in.PNG)
+
+## Cart Page
+![Cart Page](screenshots/cart_screen_1.PNG)
+
+## Coupon successfully applied
+![Coupon successfully applied](screenshots/coupon_applied1.PNG)
+
+## Checkout page
+![Checkout page](screenshots/checkout_1.PNG)
+
+## PDF Order Invoice
+![PDF Order Invoice](screenshots/order_invoice_pdf_screenshot.PNG)
+
+## User Order history
+![User Order history](screenshots/user_history.PNG)
+
+## Rating system for users
+![Rating system for users](screenshots/rating_1.PNG)
+
+## Admin Dashboard
+![Admin Dashboard](screenshots/admin_dashboard.PNG)
+
+## Coupon create
+![Coupon create](screenshots/coupon_create.PNG)
+
+## Drag and drop images while creating product
+![Drag and drop images while creating product](screenshots/drag_and_drop_images.PNG)
+
+## Similar Forms for Category/SubCategory creation
+![Similar Forms for Category/SubCategory creation](screenshots/similar_forms_category.PNG)
