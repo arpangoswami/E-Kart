@@ -33,13 +33,15 @@
     "react-redux": "^7.2.4",
     "react-responsive": "^9.0.0-beta.3",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.3",
     "react-star-ratings": "^2.3.0",
     "react-toastify": "^7.0.4",
     "redux": "^4.1.1",
     "redux-devtools-extension": "^2.13.9",
     "typewriter-effect": "^2.18.2",
     "web-vitals": "^1.1.2"
+  },
+  "devDependencies": {
+    "react-scripts": "4.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
